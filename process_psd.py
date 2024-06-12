@@ -1,12 +1,14 @@
 from psd_tools import PSDImage
 from PIL import Image
 
-def main():
-    # PSDファイルの読み込み
-    psd = PSDImage.open('./test/小春六花ver1.1_めじろーす_im11070159.psd')
+def make_psd_data(psd_path):
+    psd = PSDImage.open(psd_path)
+    psd_list = _reprocess_psd(psd)
+    image = _make_image(psd,psd_list)
 
+
+def _reprocess_psd(psd):
     psd_list = []
-
     # psd_list作成
     for index,layer in enumerate(psd):
         if layer.is_group():# レイヤーがグループの場合、その中のレイヤーも処理
@@ -17,7 +19,9 @@ def main():
             psd_list.append(sublayer_list)
         else:# レイヤーが単独のレイヤーの場合
             psd_list.append([[layer.left, layer.top, layer.visible]])
+    return psd_list
 
+def _make_image(psd,psd_list):
     combined_image = Image.new('RGBA', psd.size)
     for group_index,item in enumerate(psd_list):
         if len(item) == 1:
@@ -30,6 +34,7 @@ def main():
                     layer_image = psd[group_index][layer_index].composite()
                     combined_image.paste(layer_image, (layer_info[0], layer_info[1]), layer_image)
     combined_image.show()
+    return combined_image
 
 if __name__ == "__main__":
-    main()
+    make_psd_data("./test/小春六花ver1.1_めじろーす_im11070159.psd")

@@ -12,8 +12,8 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 bl_info = {
-    "name" : "001_apply_modifier",##
-    "author" : "lath",
+    "name" : "PSDtool-for-blender",
+    "author" : "laTH380",
     "description" : "",
     "blender" : (3, 6, 11),
     "version" : (0, 0, 1),
@@ -31,19 +31,21 @@ sys.path.insert(0, os.path.join(basepath, 'ex-library.zip'))
 
 if "bpy" in locals():
     import imp
-    imp.reload(test_operator)
-    imp.reload(test_panel)
+    imp.reload(main_operator)
+    imp.reload(ui_panel)
+    imp.reload(io_import_psd_as_planes)
 else:
-    from . import test_operator
-    from . import test_panel
+    from . import main_operator
+    from . import ui_panel
+    from . import io_import_psd_as_planes
     import bpy
 
 import bpy
 
 classes = (
-    test_panel.TEST_PT_Panel,
-    test_operator.TEST_OT_Apply_All_Op,
-    test_operator.TEST_OT_Delete_All_Op
+    ui_panel.PSDTOOL_PT_Panel,
+    # main_operator.TEST_OT_Apply_All_Op,
+    io_import_psd_as_planes.IMPORT_IMAGE_OT_to_plane
 )
 
 def register():
