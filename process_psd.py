@@ -1,5 +1,6 @@
 from psd_tools import PSDImage
 from PIL import Image
+import os
 
 import bpy
 
@@ -18,7 +19,8 @@ def make_psd_data(psd_path):
     psd = PSDImage.open(psd_path)
     psd_info, layer_images = _first_process_psd(psd)
     first_image = _make_image(psd,psd_info)
-    return first_image, layer_images, psd_info
+    name = os.path.basename(psd_path)
+    return first_image, layer_images, psd_info, name
 
 
 def _first_process_psd(psd):

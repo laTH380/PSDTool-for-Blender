@@ -18,6 +18,7 @@ import os
 import io
 import warnings
 import re
+import tempfile
 from itertools import count, repeat
 from collections import namedtuple
 from math import pi
@@ -585,10 +586,16 @@ def setup_compositing(context, plane, img_spec):
 
     context.view_layer.update()
 
-def make_imagename_for_psdtool(kindID, objectID, ID1, ID2):
+#PSDToolKitで使用する画像の名付け用
+def make_imagename_for_psdtool(kindID, objectID, ID1, ID2=-1):
     name = "PSDToolKit_"
     if kindID == 0:#レイヤー画像用ネーミング
-        name = 
+        name += str(objectID) + "_layer_" + str(ID1) + "_" + str(ID2)
+    elif kindID == 1:#テクスチャ画像ネーミング
+        name += str(objectID) + "_frame_" + str(ID1)
+    else:
+        print("naming error")
+    return name
 
 
 # -----------------------------------------------------------------------------
@@ -953,22 +960,24 @@ class IMPORT_IMAGE_OT_to_plane(Operator, AddObjectHelper):
             else:
                 print("psd以外は除去されました")#エラーメッセージとして表示
 
-        #オブジェクトIDの管理,psdを処理してカスタムプロパティとして保持するデータとレイヤーごとの画像を用意
+        #オブジェクトIDの管理,psdを処理してカスタムプロパティとして保持するデータとレイヤーごとの画像を用意,最初のテクスチャ画像の設定
         psd_object_list = []#indexがID。要素はファイル名
-        processed_psds = []#[psd_info,[layer_images]]
+        processed_psds = []#[id,name,[psd_info],[layer_images]]
         for index, psd in enumerate(psds):
-            first_image, layer_images, psd_info = process_psd.make_psd_data(psd.image.filepath)
-            processed_psds.append([psd_info,layer_images])
-            psd_object_list.append(psd.image.name)
+            first_image, layer_images, psd_info, name = process_psd.make_psd_data(psd.image.filepath)
+            objectid = len(psd_object_list)
+            psd_object_list.append(name + "_" + str(objectid))
+            processed_psds.append([objectid, name, psd_info,layer_images])
+            name = make_imagename_for_psdtool(1, objectid, context.scene.frame_current)
+            self.paccking_imageobject(first_image, name)
+            psds[index] = ImageSpec(bpy.data.images.get(name), psds[index].size, psds[index].frame_start, psds[index].frame_offset, psds[index].frame_duration)
 
-        #レイヤー画像データのパック、最初のテクスチャ画像の設定
+        #レイヤー画像データのパック、
         for index, processed_psd in enumerate(processed_psds):
-            for layer_index, layer in processed_psd[1]:
-                for sublayer_index, sublayer in layer:
-                    name = make_imagename_for_psdtool()
+            for layer_index, layer in enumerate(processed_psd[3]):
+                for sublayer_index, sublayer in enumerate(layer):
+                    name = make_imagename_for_psdtool(0,processed_psd[0],layer_index,sublayer_index)
                     self.paccking_imageobject(sublayer, name)
-                psds[index].image = bpy.data.images.load(first_image)
-            
 
         # Create individual planes
         planes = [self.single_image_spec_to_plane(context, img_spec) for img_spec in psds]
@@ -996,11 +1005,14 @@ class IMPORT_IMAGE_OT_to_plane(Operator, AddObjectHelper):
 
     #paccking image object to .blend file
     def paccking_imageobject(self, image, name):
-        # メモリバッファに保存
-        image_data = io.BytesIO()
-        image.save(image_data, format="PNG")
+        # Blenderの一時ディレクトリを取得
+        temp_dir = tempfile.mkdtemp(prefix='blender_temp_')
+        # 仮の画像ファイルパスを作成
+        temp_image_path = os.path.join(temp_dir, "temp_image.png")
+        # 仮の画像データを一時ファイルに保存
+        image.save(temp_image_path, format="PNG")
         # 画像をBlenderにロード,パック
-        loaded_image = bpy.data.images.load(image_data)
+        loaded_image = bpy.data.images.load(temp_image_path)
         loaded_image.name = name
         loaded_image.pack()
         # パックが成功したかどうかを確認
@@ -1008,6 +1020,8 @@ class IMPORT_IMAGE_OT_to_plane(Operator, AddObjectHelper):
             print(f"Image '{loaded_image.name}' is packed into the .blend file.")
         else:
             print(f"Failed to pack image '{loaded_image.name}' into the .blend file.")
+        # 一時ファイルを削除する
+        os.remove(temp_image_path)
         
     # operate on a single image
     def single_image_spec_to_plane(self, context, img_spec):
