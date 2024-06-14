@@ -16,23 +16,28 @@ import bpy
 
 def make_psd_data(psd_path):
     psd = PSDImage.open(psd_path)
-    psd_list = _reprocess_psd(psd)
-    image = _make_image(psd,psd_list)
+    psd_info, layer_images = _first_process_psd(psd)
+    first_image = _make_image(psd,psd_info)
+    return first_image, layer_images, psd_info
 
 
-def _reprocess_psd(psd):
-    psd_list = []
-    # psd_list作成
+def _first_process_psd(psd):
+    psd_info = []
+    layer_images = []#psd_infoと同じ構造でレイヤーごとの画像データが入っている
     for index,layer in enumerate(psd):
         if layer.is_group():# レイヤーがグループの場合、その中のレイヤーも処理
-            sublayer_list = []
+            sublayer_info = []
+            sublayer_images = []
             for sublayer in layer:
                 layer_info = [sublayer.left, sublayer.top, sublayer.visible]
-                sublayer_list.append(layer_info)
-            psd_list.append(sublayer_list)
+                sublayer_info.append(layer_info)
+                sublayer_images.append(sublayer.composite())
+            psd_info.append(sublayer_info)
+            layer_images.append(sublayer_images)
         else:# レイヤーが単独のレイヤーの場合
-            psd_list.append([[layer.left, layer.top, layer.visible]])
-    return psd_list
+            psd_info.append([[layer.left, layer.top, layer.visible]])
+            layer_images.append([layer.composite()])
+    return psd_info, layer_images
 
 def _make_image(psd,psd_list):
     combined_image = Image.new('RGBA', psd.size)
