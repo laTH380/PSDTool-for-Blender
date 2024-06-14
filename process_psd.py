@@ -1,6 +1,19 @@
 from psd_tools import PSDImage
 from PIL import Image
 
+import bpy
+
+# import os
+# import sys
+# # PYTHONPATHにzipファイルを追加
+# basepath = os.path.split(os.path.realpath(__file__))[0]
+# print(os.path.join(basepath, 'ex-library'))
+# sys.path.insert(0, os.path.join(basepath, 'ex-library'))
+# # PILモジュールのロード
+# import PIL
+# from PIL import Image
+# from psd_tools import PSDImage
+
 def make_psd_data(psd_path):
     psd = PSDImage.open(psd_path)
     psd_list = _reprocess_psd(psd)

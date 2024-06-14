@@ -25,18 +25,27 @@ bl_info = {
 import os
 import sys
    
-# PYTHONPATHにzipファイルを追加
+# PYTHONPATHにex-libraryを追加
 basepath = os.path.split(os.path.realpath(__file__))[0]
-sys.path.insert(0, os.path.join(basepath, 'ex-library.zip'))
+print(os.path.join(basepath, 'ex-library'))
+sys.path.insert(0, os.path.join(basepath, 'ex-library'))
+sys.path.insert(0, basepath)
+
+# PILモジュールのロード
+import PIL
+from PIL import Image
+
 
 if "bpy" in locals():
     import imp
     imp.reload(main_operator)
     imp.reload(ui_panel)
+    imp.reload(process_psd)
     imp.reload(io_import_psd_as_planes)
 else:
     from . import main_operator
     from . import ui_panel
+    from . import process_psd
     from . import io_import_psd_as_planes
     import bpy
 
