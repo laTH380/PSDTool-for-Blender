@@ -587,12 +587,14 @@ def setup_compositing(context, plane, img_spec):
     context.view_layer.update()
 
 #PSDToolKitで使用する画像の名付け用
-def make_imagename_for_psdtool(kindID, objectID, ID1, ID2=-1):
+def make_name_for_psdtool(kindID, objectID, ID1=-1, ID2=-1):
     name = "PSDToolKit_"
     if kindID == 0:#レイヤー画像用ネーミング
         name += str(objectID) + "_layer_" + str(ID1) + "_" + str(ID2)
     elif kindID == 1:#テクスチャ画像ネーミング
         name += str(objectID) + "_frame_" + str(ID1)
+    elif kindID == 2:#オブジェクトデータネーミング
+        name += str(objectID) + "_mesh"
     else:
         print("naming error")
     return name
@@ -601,11 +603,11 @@ def make_imagename_for_psdtool(kindID, objectID, ID1, ID2=-1):
 # -----------------------------------------------------------------------------
 # Operator
 
-class IMPORT_IMAGE_OT_to_plane(Operator, AddObjectHelper):
+class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
     """Create mesh plane(s) from image files with the appropriate aspect ratio"""
 
-    bl_idname = "import_image.to_plane"
-    bl_label = "Import Images as Planes"
+    bl_idname = "psdtoolkit.import_psd"
+    bl_label = "Import Psd"
     bl_options = {'REGISTER', 'PRESET', 'UNDO'}
 
     # ----------------------
@@ -961,26 +963,33 @@ class IMPORT_IMAGE_OT_to_plane(Operator, AddObjectHelper):
                 print("psd以外は除去されました")#エラーメッセージとして表示
 
         #オブジェクトIDの管理,psdを処理してカスタムプロパティとして保持するデータとレイヤーごとの画像を用意,最初のテクスチャ画像の設定
-        psd_object_list = []#indexがID。要素はファイル名
-        processed_psds = []#[id,name,[psd_info],[layer_images]]
+        processed_psds = []#[[id,object_name,object_data_name,[psd_info],[layer_images]]]
         for index, psd in enumerate(psds):
-            first_image, layer_images, psd_info, name = process_psd.make_psd_data(psd.image.filepath)
-            objectid = len(psd_object_list)
-            psd_object_list.append(name + "_" + str(objectid))
-            processed_psds.append([objectid, name, psd_info,layer_images])
-            name = make_imagename_for_psdtool(1, objectid, context.scene.frame_current)
-            self.paccking_imageobject(first_image, name)
-            psds[index] = ImageSpec(bpy.data.images.get(name), psds[index].size, psds[index].frame_start, psds[index].frame_offset, psds[index].frame_duration)
+            #psd_process
+            first_image, layer_images, psd_info, filename = process_psd.make_psd_data(psd.image.filepath)
+            objectid = len(context.scene.PSDTOOLKIT_scene_properties.psd_list)
+            object_data_name = make_name_for_psdtool(2,objectid)
+            processed_psds.append([objectid, filename, object_data_name, psd_info, layer_images])
+            #オブジェクトリスト管理
+            bpy.ops.psdtoolkit.add_scene_properties_psd_list(objectname = object_data_name)
+            #初期画像のパック
+            first_tex_name = make_name_for_psdtool(1, objectid, context.scene.frame_current)
+            self.paccking_imageobject(first_image, first_tex_name)
+            psds[index] = ImageSpec(bpy.data.images.get(first_tex_name), psds[index].size, psds[index].frame_start, psds[index].frame_offset, psds[index].frame_duration)
 
-        #レイヤー画像データのパック、
+        #レイヤー画像データのパック
         for index, processed_psd in enumerate(processed_psds):
-            for layer_index, layer in enumerate(processed_psd[3]):
+            for layer_index, layer in enumerate(processed_psd[4]):
                 for sublayer_index, sublayer in enumerate(layer):
-                    name = make_imagename_for_psdtool(0,processed_psd[0],layer_index,sublayer_index)
+                    name = make_name_for_psdtool(0,processed_psd[0],layer_index,sublayer_index)
                     self.paccking_imageobject(sublayer, name)
 
-        # Create individual planes
-        planes = [self.single_image_spec_to_plane(context, img_spec) for img_spec in psds]
+        # Create individual planes + カスタムプロパティをつける
+        planes = []
+        for index, img_spec in enumerate(psds):
+            plane = self.single_image_spec_to_plane(context, img_spec, processed_psds[index][1], processed_psds[index][2])
+            self.add_object_property(processed_psds[index][2], processed_psds[index][3])
+            planes.append(plane)
 
         context.view_layer.update()
 
@@ -1003,12 +1012,22 @@ class IMPORT_IMAGE_OT_to_plane(Operator, AddObjectHelper):
         # all done!
         self.report({'INFO'}, tip_("Added {} Image Plane(s)").format(len(planes)))
 
-    #paccking image object to .blend file
+
+    #　プレーンにpsd情報のカスタムプロパティを設定
+    def add_object_property(self, object_data_name, psd_info):
+        for group_layer in psd_info:
+            for sub_layer_index, sub_layer in enumerate(group_layer):
+                if sub_layer_index == 0:
+                    bpy.ops.psdtoolkit.add_object_properties_layer_info(object_data_name=object_data_name, change_parent_layer=True, x=sub_layer[0], y=sub_layer[1], visible=sub_layer[2])
+                else:
+                    bpy.ops.psdtoolkit.add_object_properties_layer_info(object_data_name=object_data_name, x=sub_layer[0], y=sub_layer[1], visible=sub_layer[2])
+
+    #　paccking image object to .blend file
     def paccking_imageobject(self, image, name):
         # Blenderの一時ディレクトリを取得
         temp_dir = tempfile.mkdtemp(prefix='blender_temp_')
         # 仮の画像ファイルパスを作成
-        temp_image_path = os.path.join(temp_dir, "temp_image.png")
+        temp_image_path = os.path.join(temp_dir, name + ".png")
         # 仮の画像データを一時ファイルに保存
         image.save(temp_image_path, format="PNG")
         # 画像をBlenderにロード,パック
@@ -1024,7 +1043,7 @@ class IMPORT_IMAGE_OT_to_plane(Operator, AddObjectHelper):
         os.remove(temp_image_path)
         
     # operate on a single image
-    def single_image_spec_to_plane(self, context, img_spec):
+    def single_image_spec_to_plane(self, context, img_spec, object_name, object_data_name):
 
         # Configure image
         self.apply_image_options(img_spec.image)
@@ -1035,7 +1054,7 @@ class IMPORT_IMAGE_OT_to_plane(Operator, AddObjectHelper):
             material = self.create_cycles_material(context, img_spec)
 
         # Create and position plane object
-        plane = self.create_image_plane(context, material.name, img_spec)
+        plane = self.create_image_plane(context, material.name, img_spec, object_name, object_data_name)
 
         # Assign Material
         plane.data.materials.append(material)
@@ -1043,7 +1062,6 @@ class IMPORT_IMAGE_OT_to_plane(Operator, AddObjectHelper):
         # If applicable, setup Corner Pin node
         if self.compositing_nodes:
             setup_compositing(context, plane, img_spec)
-
         return plane
 
     def apply_image_options(self, image):
@@ -1160,7 +1178,7 @@ class IMPORT_IMAGE_OT_to_plane(Operator, AddObjectHelper):
 
     # -------------------------------------------------------------------------
     # Geometry Creation
-    def create_image_plane(self, context, name, img_spec):
+    def create_image_plane(self, context, material_name, img_spec, object_name, object_data_name):
 
         width, height = self.compute_plane_size(context, img_spec)
 
@@ -1171,7 +1189,8 @@ class IMPORT_IMAGE_OT_to_plane(Operator, AddObjectHelper):
         if plane.mode != 'OBJECT':
             bpy.ops.object.mode_set(mode='OBJECT')
         plane.dimensions = width, height, 0.0
-        plane.data.name = plane.name = name
+        plane.data.name = object_data_name
+        plane.name = object_name
         bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
 
         # If sizing for camera, also insert into the camera's field of view

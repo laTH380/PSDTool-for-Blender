@@ -12,8 +12,8 @@ class PSDTOOL_PT_Panel(Panel):#領域定義
 
         row = layout.row()#横並びの要素枠
         col = row.column()#縦並びの要素枠
-        col.operator("import_image.to_plane", text = "Apply All")
-        col.operator("import_image.to_plane", text = "Apply All_3")
+        col.operator("psdtoolkit.import_psd", text = "Apply All")
+        col.operator("psdtoolkit.import_psd", text = "Apply All_3")
 
         col = row.column()
-        col.operator("import_image.to_plane", text = "Delete All")
+        col.operator("psdtoolkit.import_psd", text = "Delete All")

@@ -40,31 +40,48 @@ if "bpy" in locals():
     import imp
     imp.reload(main_operator)
     imp.reload(ui_panel)
+    imp.reload(control_property)
     imp.reload(process_psd)
     imp.reload(io_import_psd_as_planes)
 else:
     from . import main_operator
     from . import ui_panel
+    from . import control_property
     from . import process_psd
     from . import io_import_psd_as_planes
     import bpy
 
 import bpy
+from bpy.props import PointerProperty, StringProperty, IntProperty
 
 classes = (
+    #data
+    control_property.PSDTOOLKIT_scene_properties_psdlist_item,
+    control_property.PSDTOOLKIT_scene_properties,
+    control_property.PSDTOOLKIT_object_properties_layer_info_item,
+    control_property.PSDTOOLKIT_object_properties_layer_info,
+    control_property.PSDTOOLKIT_object_properties,
+    #ui
     ui_panel.PSDTOOL_PT_Panel,
-    # main_operator.TEST_OT_Apply_All_Op,
-    io_import_psd_as_planes.IMPORT_IMAGE_OT_to_plane
+    #operator
+    control_property.PSDTOOLKIT_OT_add_scene_properties_psd_list,
+    control_property.PSDTOOLKIT_OT_add_object_properties_layer_info,
+    io_import_psd_as_planes.PSDTOOLKIT_OT_import_psd
 )
 
 def register():
     for c in classes:
         bpy.utils.register_class(c)
+    bpy.types.Scene.PSDTOOLKIT_scene_properties = PointerProperty(type=control_property.PSDTOOLKIT_scene_properties)
+    bpy.types.Object.PSDTOOLKIT_object_properties = PointerProperty(type=control_property.PSDTOOLKIT_object_properties)
 
 def unregister():
     for c in classes:
         bpy.utils.register_class(c)
+    del bpy.types.Scene.PSDTOOLKIT_scene_properties
+    del bpy.types.Object.PSDTOOLKIT_object_properties
 
 if __name__ == "__main__":
     register()
 
+#わからなくなるのでアドオン名を使う場合はid以外すべて大文字で
