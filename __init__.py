@@ -54,6 +54,16 @@ else:
 import bpy
 from bpy.props import PointerProperty, StringProperty, IntProperty
 
+# 翻訳辞書
+translations = {
+    "ja_JP": {
+        ("*", "Import Psd as Planes"): "PSDファイルを画像として追加",
+        ("*", "Object ID"): "オブジェクトID",
+        ("*", "Object Name"): "オブジェクト名",
+        ("*", "Target Object Name"): "ターゲットオブジェクト名",
+    }
+}
+
 classes = (
     #data
     control_property.PSDTOOLKIT_scene_properties_psdlist_item,
@@ -62,26 +72,35 @@ classes = (
     control_property.PSDTOOLKIT_object_properties_layer_info,
     control_property.PSDTOOLKIT_object_properties,
     #ui
-    ui_panel.PSDTOOL_PT_Panel,
+    # ui_panel.PSDTOOL_PT_Panel,
     #operator
     control_property.PSDTOOLKIT_OT_add_scene_properties_psd_list,
     control_property.PSDTOOLKIT_OT_add_object_properties_layer_info,
     io_import_psd_as_planes.PSDTOOLKIT_OT_import_psd
 )
 
+def import_psds_button(self, context):#メニューに追加するボタンを作る関数
+    self.layout.operator(io_import_psd_as_planes.PSDTOOLKIT_OT_import_psd.bl_idname, text="Import Psd as Planes", icon='TEXTURE')
+
 def register():
     for c in classes:
         bpy.utils.register_class(c)
+    bpy.app.translations.register(__name__, translations)
     bpy.types.Scene.PSDTOOLKIT_scene_properties = PointerProperty(type=control_property.PSDTOOLKIT_scene_properties)
     bpy.types.Object.PSDTOOLKIT_object_properties = PointerProperty(type=control_property.PSDTOOLKIT_object_properties)
+    bpy.types.TOPBAR_MT_file_import.append(import_psds_button)
+    bpy.types.VIEW3D_MT_image_add.append(import_psds_button)
 
 def unregister():
-    for c in classes:
-        bpy.utils.register_class(c)
+    bpy.types.TOPBAR_MT_file_import.remove(import_psds_button)
+    bpy.types.VIEW3D_MT_image_add.remove(import_psds_button)
     del bpy.types.Scene.PSDTOOLKIT_scene_properties
     del bpy.types.Object.PSDTOOLKIT_object_properties
+    bpy.app.translations.unregister(__name__)
+    for c in classes:
+        bpy.utils.unregister_class(c)
 
 if __name__ == "__main__":
     register()
 
-#わからなくなるのでアドオン名を使う場合はid以外すべて大文字で
+#わからなくなるのでアドオン名を使う場合はid以外すべて大文字/小文字で
