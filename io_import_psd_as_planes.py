@@ -982,7 +982,7 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
             for layer_index, layer in enumerate(processed_psd[4]):
                 for sublayer_index, sublayer in enumerate(layer):
                     name = make_name_for_psdtool(0,processed_psd[0],layer_index,sublayer_index)
-                    self.paccking_imageobject(sublayer, name)
+                    # self.paccking_imageobject(sublayer, name)
 
         # Create individual planes + カスタムプロパティをつける
         planes = []
