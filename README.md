@@ -4,7 +4,7 @@ PSDファイルを正しく透過して取り込む機能を追加するBlender�
 動作確認済み：blender v3.6.11
 
 ## ダウンロード
-最新版はここ
+最新版は[ここをクリック](https://github.com/laTH380/PSDToolKit-for-blender/releases/download/v1.0.0/psd_to_plane_1.0.0.zip)
 
 ## 使用方法
 一般的なアドオンと同じように有効化してください。
