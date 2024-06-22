@@ -1,6 +1,5 @@
 __pycache__/
-
-venv_PSDtool-for-blender/
+venv_psd_to_plane/
 test/
 ex-library/
 releases/psd_to_plane/
