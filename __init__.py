@@ -12,11 +12,11 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 bl_info = {
-    "name" : "PSDtool-for-blender",
+    "name" : "psd to plane",
     "author" : "laTH380",
     "description" : "",
     "blender" : (3, 6, 11),
-    "version" : (0, 0, 1),
+    "version" : (1, 0, 0),
     "location" : "",
     "warning" : "",
     "category" : "Generic"
