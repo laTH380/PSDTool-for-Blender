@@ -1,4 +1,5 @@
 venv_PSDtool-for-blender/
 test/
-
+ex-library/
+releaces/
 venv2zip.sh
