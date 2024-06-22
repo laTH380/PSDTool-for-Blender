@@ -3,5 +3,5 @@ __pycache__/
 venv_PSDtool-for-blender/
 test/
 ex-library/
-releases/
+releases/psd_to_plane/
 venv2zip.sh
