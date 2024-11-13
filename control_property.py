@@ -3,6 +3,7 @@ from bpy.props import FloatProperty, CollectionProperty, IntProperty, StringProp
 from bpy.types import PropertyGroup, Operator
 
 #名前解決が大事なので同じものを指すときは必ず同じ名前にする
+#プロパティグループを継承することで、カスタムプロパティを定義できる
 
 # シーンプロパティ
 class PSDTOOLKIT_scene_properties_psdlist_item(PropertyGroup):
@@ -11,7 +12,7 @@ class PSDTOOLKIT_scene_properties_psdlist_item(PropertyGroup):
 class PSDTOOLKIT_scene_properties(PropertyGroup):
     psd_list: CollectionProperty(type=PSDTOOLKIT_scene_properties_psdlist_item)#BlenderのCollectionPropertyを使用すると、複数のデータを1つのプロパティとしてグループ化でき、リストや配列のようなデータ構造を持たせることができます
 
-class PSDTOOLKIT_OT_add_scene_properties_psd_list(Operator):
+class PSDTOOLKIT_OT_add_scene_properties_psd_list(Operator):#カスタムプロパティはこのようにアクセッサを作っておいてアクセスする
     bl_idname = "psdtoolkit.add_scene_properties_psd_list"
     bl_label = "Add psd object"
 
