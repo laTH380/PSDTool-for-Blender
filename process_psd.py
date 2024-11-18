@@ -15,6 +15,7 @@ import bpy
 # from PIL import Image
 # from psd_tools import PSDImage
 
+#Blenderオペレータから呼ばれる関数
 def make_psd_data(psd_path):
     psd = PSDImage.open(psd_path)
     psd_info, layer_images = _first_process_psd(psd)
@@ -31,10 +32,10 @@ def _first_process_psd(psd):
             sublayer_info = []
             sublayer_images = []
             for sublayer in layer:
-                layer_info = [sublayer.left, sublayer.top, sublayer.visible]
+                layer_info = [sublayer.left, sublayer.top, sublayer.visible, sublayer.name]
                 sublayer_info.append(layer_info)
                 sublayer_images.append(sublayer.composite())
-            psd_info.append(sublayer_info)
+            psd_info.append([sublayer_info, layer.name])
             layer_images.append(sublayer_images)
         else:# レイヤーが単独のレイヤーの場合
             psd_info.append([[layer.left, layer.top, layer.visible]])
