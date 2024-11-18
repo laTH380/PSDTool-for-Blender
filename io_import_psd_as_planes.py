@@ -14,6 +14,13 @@
 #     "category": "Import-Export",
 # }
 
+
+# ###############################
+# 目次
+# def execute(self, context):#これがメインの処理。このオペレータが呼び出されるとこれが実行される
+# ######################################
+
+
 import os
 import io
 import warnings
@@ -945,7 +952,6 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
         return {'FINISHED'}
 
     def import_images(self, context):
-
         # load images / sequences
         files = tuple(load_images(
             (fn.name for fn in self.files),
@@ -979,8 +985,8 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
 
         #レイヤー画像データのパック
         for index, processed_psd in enumerate(processed_psds):
-            for layer_index, layer in enumerate(processed_psd[4]):
-                for sublayer_index, sublayer in enumerate(layer):
+            for layer_index, layer_image in enumerate(processed_psd[4]):
+                for sublayer_index, sublayer in enumerate(layer_image):
                     name = make_name_for_psdtool(0,processed_psd[0],layer_index,sublayer_index)
                     # self.paccking_imageobject(sublayer, name)
 
@@ -1016,11 +1022,14 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
     #　プレーンにpsd情報のカスタムプロパティを設定
     def add_object_property(self, object_data_name, psd_info):
         for group_layer in psd_info:
-            for sub_layer_index, sub_layer in enumerate(group_layer):
-                if sub_layer_index == 0:
-                    bpy.ops.psdtoolkit.add_object_properties_layer_info(object_data_name=object_data_name, change_parent_layer=True, x=sub_layer[0], y=sub_layer[1], visible=sub_layer[2])
-                else:
-                    bpy.ops.psdtoolkit.add_object_properties_layer_info(object_data_name=object_data_name, x=sub_layer[0], y=sub_layer[1], visible=sub_layer[2])
+            if group_layer["sublayer"] is None:
+                bpy.ops.psdtoolkit.add_object_properties_layer_info(object_data_name=object_data_name, change_parent_layer=True, x=group_layer["x"], y=group_layer["y"], visible=group_layer["visible"])
+            else:
+                for sub_layer_index, sub_layer in enumerate(group_layer["sublayer"]):
+                    if sub_layer_index == 0:
+                        bpy.ops.psdtoolkit.add_object_properties_layer_info(object_data_name=object_data_name, change_parent_layer=True, x=sub_layer["x"], y=sub_layer["y"], visible=sub_layer["visible"])
+                    else:
+                        bpy.ops.psdtoolkit.add_object_properties_layer_info(object_data_name=object_data_name, x=sub_layer["x"], y=sub_layer["y"], visible=sub_layer["visible"])
 
     #　paccking image object to .blend file
     def paccking_imageobject(self, image, name):

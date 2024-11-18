@@ -28,33 +28,34 @@ def _first_process_psd(psd):
     psd_info = []
     layer_images = []#psd_infoと同じ構造でレイヤーごとの画像データが入っている
     for index,layer in enumerate(psd):
+        psd_info.append({"x":layer.left, "y":layer.top, "visible":layer.visible, "name":layer.name})
         if layer.is_group():# レイヤーがグループの場合、その中のレイヤーも処理
             sublayer_info = []
             sublayer_images = []
             for sublayer in layer:
-                layer_info = [sublayer.left, sublayer.top, sublayer.visible, sublayer.name]
+                layer_info = {"x":sublayer.left, "y":sublayer.top, "visible":sublayer.visible, "name":sublayer.name, "sublayer":None}
                 sublayer_info.append(layer_info)
                 sublayer_images.append(sublayer.composite())
-            psd_info.append([sublayer_info, layer.name])
+            psd_info[index]["sublayer"] = sublayer_info
             layer_images.append(sublayer_images)
-        else:# レイヤーが単独のレイヤーの場合
-            psd_info.append([[layer.left, layer.top, layer.visible]])
+        else:
+            psd_info[index]["sublayer"] = None
             layer_images.append([layer.composite()])
     return psd_info, layer_images
 
-def _make_image(psd,psd_list):
+def _make_image(psd,psd_info):
     combined_image = Image.new('RGBA', psd.size)
-    for group_index,item in enumerate(psd_list):
-        if len(item) == 1:
-            if item[0][2]:
+    for group_index,item in enumerate(psd_info):
+        if item["visible"]:
+            if item["sublayer"] is None:# グループレイヤーでない場合
                 layer_image = psd[group_index].composite()
-                combined_image.paste(layer_image, (item[0][0], item[0][1]), layer_image)
-        else:# グループレイヤーの場合
-            for layer_index, layer_info in enumerate(item):
-                if layer_info[2]:
-                    layer_image = psd[group_index][layer_index].composite()
-                    combined_image.paste(layer_image, (layer_info[0], layer_info[1]), layer_image)
-    # combined_image.show()
+                combined_image.paste(layer_image, (item["x"], item["y"]), layer_image)
+            else:
+                for layer_index, layer_info in enumerate(item["sublayer"]):
+                    if layer_info["visible"]:
+                        layer_image = psd[group_index][layer_index].composite()
+                        combined_image.paste(layer_image, (layer_info["x"], layer_info["y"]), layer_image)
+    combined_image.show()
     return combined_image
 
 if __name__ == "__main__":
