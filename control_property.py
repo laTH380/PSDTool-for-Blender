@@ -47,6 +47,7 @@ class PSDTOOLKIT_psd_object_properties_sub3_layer(PropertyGroup):
     y: IntProperty(name="y", default=0)
     visible: BoolProperty(name="visible", default=True)
     name: StringProperty(name="name", default="")
+    active_layer_index: IntProperty(name="active_layer_index", default=0)
 
 class PSDTOOLKIT_psd_object_properties_sub2_layer(PropertyGroup):
     sublayer: CollectionProperty(type=PSDTOOLKIT_psd_object_properties_sub3_layer)
@@ -54,6 +55,7 @@ class PSDTOOLKIT_psd_object_properties_sub2_layer(PropertyGroup):
     y: IntProperty(name="y", default=0)
     visible: BoolProperty(name="visible", default=True)
     name: StringProperty(name="name", default="")
+    active_layer_index: IntProperty(name="active_layer_index", default=0)
 
 class PSDTOOLKIT_psd_object_properties_sub1_layer(PropertyGroup):
     sublayer: CollectionProperty(type=PSDTOOLKIT_psd_object_properties_sub2_layer)
@@ -61,6 +63,7 @@ class PSDTOOLKIT_psd_object_properties_sub1_layer(PropertyGroup):
     y: IntProperty(name="y", default=0)
     visible: BoolProperty(name="visible", default=True)
     name: StringProperty(name="name", default="")
+    active_layer_index: IntProperty(name="active_layer_index", default=0)
 
 class PSDTOOLKIT_psd_object_properties_top_layer(PropertyGroup):
     sublayer: CollectionProperty(type=PSDTOOLKIT_psd_object_properties_sub1_layer)
@@ -68,9 +71,11 @@ class PSDTOOLKIT_psd_object_properties_top_layer(PropertyGroup):
     y: IntProperty(name="y", default=0)
     visible: BoolProperty(name="visible", default=True)
     name: StringProperty(name="name", default="")
+    active_layer_index: IntProperty(name="active_layer_index", default=0)
 
 class PSDTOOLKIT_psd_object_properties(PropertyGroup):
     sublayer: CollectionProperty(type=PSDTOOLKIT_psd_object_properties_top_layer)
+    active_layer_index: IntProperty(name="active_layer_index", default=0)
 
 class PSDTOOLKIT_OT_make_object_properties(Operator):#指定されたオブジェクトのPSDTOOLKIT_psd_object_propertiesを作成
     bl_idname = "psdtoolkit.make_psd_object_properties"

@@ -66,8 +66,8 @@ class PSDTOOL_PT_main_panel(Panel):
             group_layer_table_item.template_list(#その中にリストUIを作成
                 "UI_UL_list",  # リストタイプの名前を文字列として渡す
                 "custom_list_id",
-                psd_info, "psdtoolkit_layer_info",#リストのデータソースで、
-                psd_info_in_scene, "active_group_layer_index",#アクティブなアイテムのインデクス。
+                psd_info, "sublayer",#リストのデータソースで、
+                psd_info, "active_layer_index",#アクティブなアイテムのインデクス。
             )
             # layout.label(text="PSD Items:")
             # for i, item in enumerate(psd_props.psd_list):

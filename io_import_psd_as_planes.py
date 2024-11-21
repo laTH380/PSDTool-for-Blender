@@ -1027,34 +1027,34 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
     def add_object_property(self, object_name, layer_struct):
         layer_struct_string = utils.dict2jsonstring(layer_struct)
         bpy.ops.psdtoolkit.make_psd_object_properties(layer_struct=layer_struct_string, object_name=object_name)
-        for group_layer_index, group_layer in enumerate(psd_info):
-            if group_layer["sublayer"] is None:#グループレイヤーでない最上位レイヤー
-                bpy.ops.psdtoolkit.set_psd_object_properties(
-                    object_data_name=object_data_name, 
-                    sub_layer=False,
-                    x=group_layer["x"],
-                    y=group_layer["y"],
-                    visible=group_layer["visible"],
-                    layer_name=group_layer["name"]
-                )
-            else:
-                bpy.ops.psdtoolkit.set_psd_object_properties(
-                    object_data_name=object_data_name, 
-                    sub_layer=False,
-                    x=group_layer["x"],
-                    y=group_layer["y"],
-                    visible=group_layer["visible"],
-                    layer_name=group_layer["name"]
-                )
-                for sub_layer_index, sub_layer in enumerate(group_layer["sublayer"]):
-                    bpy.ops.psdtoolkit.set_psd_object_properties(
-                        object_data_name=object_data_name, 
-                        sub_layer=True,
-                        x=sub_layer["x"],
-                        y=sub_layer["y"],
-                        visible=sub_layer["visible"],
-                        layer_name=sub_layer["name"]
-                    )
+        # for group_layer_index, group_layer in enumerate(psd_info):
+        #     if group_layer["sublayer"] is None:#グループレイヤーでない最上位レイヤー
+        #         bpy.ops.psdtoolkit.set_psd_object_properties(
+        #             object_data_name=object_data_name, 
+        #             sub_layer=False,
+        #             x=group_layer["x"],
+        #             y=group_layer["y"],
+        #             visible=group_layer["visible"],
+        #             layer_name=group_layer["name"]
+        #         )
+        #     else:
+        #         bpy.ops.psdtoolkit.set_psd_object_properties(
+        #             object_data_name=object_data_name, 
+        #             sub_layer=False,
+        #             x=group_layer["x"],
+        #             y=group_layer["y"],
+        #             visible=group_layer["visible"],
+        #             layer_name=group_layer["name"]
+        #         )
+        #         for sub_layer_index, sub_layer in enumerate(group_layer["sublayer"]):
+        #             bpy.ops.psdtoolkit.set_psd_object_properties(
+        #                 object_data_name=object_data_name, 
+        #                 sub_layer=True,
+        #                 x=sub_layer["x"],
+        #                 y=sub_layer["y"],
+        #                 visible=sub_layer["visible"],
+        #                 layer_name=sub_layer["name"]
+        #             )
 
     #　paccking image object to .blend file
     def paccking_imageobject(self, image, name):
