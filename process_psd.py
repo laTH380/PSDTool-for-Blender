@@ -19,10 +19,10 @@ import utils
 #Blenderオペレータから呼ばれる関数
 def make_psd_data(psd_path):
     psd = PSDImage.open(psd_path)
-    psd_info, layer_images, layer_nums = _first_process_psd(psd)
+    psd_info, layer_images, layer_nums, layer_struct, max_depth = _first_process_psd(psd)
     first_image = _make_image(psd,psd_info)
     name = os.path.basename(psd_path)
-    return first_image, layer_images, psd_info, name, layer_nums
+    return first_image, layer_images, psd_info, name, layer_nums, layer_struct, max_depth
 
 max_depth = 0
 def _first_process_psd(psd):
@@ -50,7 +50,7 @@ def _first_process_psd(psd):
             layer_images.append([layer.composite()])
     utils.save_json_file(layer_struct, "./layer_struct.json")
     print(max_depth)
-    return psd_info, layer_images, layer_nums
+    return psd_info, layer_images, layer_nums, layer_struct, max_depth
 
 def _recur_make_psd_struct(layer, depth=0):
     depth = depth
