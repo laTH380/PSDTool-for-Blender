@@ -90,7 +90,7 @@ def register():
         bpy.utils.register_class(c)
     bpy.app.translations.register(__name__, translations)
     bpy.types.Scene.PSDTOOLKIT_scene_properties = PointerProperty(type=control_property.PSDTOOLKIT_scene_properties)
-    bpy.types.Object.PSDTOOLKIT_object_properties = PointerProperty(type=control_property.PSDTOOLKIT_psd_object_properties)
+    bpy.types.Object.PSDTOOLKIT_psd_object_properties = PointerProperty(type=control_property.PSDTOOLKIT_psd_object_properties)
     bpy.types.TOPBAR_MT_file_import.append(import_psds_button)
     bpy.types.VIEW3D_MT_image_add.append(import_psds_button)
     bpy.utils.register_class(ui_panel.PSDTOOL_PT_main_panel)
@@ -100,7 +100,7 @@ def unregister():
     bpy.types.VIEW3D_MT_image_add.remove(import_psds_button)
     bpy.utils.unregister_class(ui_panel.PSDTOOL_PT_main_panel)
     del bpy.types.Scene.PSDTOOLKIT_scene_properties
-    del bpy.types.Object.PSDTOOLKIT_object_properties
+    del bpy.types.Object.PSDTOOLKIT_psd_object_properties
     bpy.app.translations.unregister(__name__)
     for c in classes:
         bpy.utils.unregister_class(c)

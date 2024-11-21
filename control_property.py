@@ -4,6 +4,7 @@ from bpy.types import PropertyGroup, Operator
 
 #名前解決が大事なので同じものを指すときは必ず同じ名前にする
 #プロパティグループを継承することで、カスタムプロパティを定義できる
+#BlenderのCollectionPropertyを使用すると、複数のデータを1つのプロパティとしてグループ化でき、リストや配列のようなデータ構造を持たせることができます
 
 # ===========================================
 # Property classes and set operators
@@ -12,9 +13,11 @@ from bpy.types import PropertyGroup, Operator
 # シーンプロパティ
 class PSDTOOLKIT_scene_properties_psdlist_item(PropertyGroup):
     objectname: StringProperty(name="objectname", default="objectname")
+    active_group_layer_index: IntProperty(name="active_group_layer_index", default=0)
+    active_sublayer_index: IntProperty(name="active_sublayer_index", default=0)
 
 class PSDTOOLKIT_scene_properties(PropertyGroup):
-    psd_list: CollectionProperty(type=PSDTOOLKIT_scene_properties_psdlist_item)#BlenderのCollectionPropertyを使用すると、複数のデータを1つのプロパティとしてグループ化でき、リストや配列のようなデータ構造を持たせることができます
+    psd_list: CollectionProperty(type=PSDTOOLKIT_scene_properties_psdlist_item)
 
 class PSDTOOLKIT_OT_add_scene_properties_psd_list(Operator):#カスタムプロパティはこのようにアクセッサを作っておいてアクセスする
     bl_idname = "psdtoolkit.add_scene_properties_psd_list"
@@ -64,6 +67,10 @@ class PSDTOOLKIT_OT_make_object_properties(Operator):#指定されたオブジ�
                     group_layer = target_object.PSDTOOLKIT_psd_object_properties.psdtoolkit_layer_info.add()
                     for i in range(layer_num):
                         group_layer.sublayer.add()
+            print(target_object.PSDTOOLKIT_psd_object_properties.psdtoolkit_layer_info)
+        else:
+            self.report({ 'ERROR' }, "The psd plane can't be found")
+            return { 'CANCELLED' }
         return {'FINISHED'}
 
 class PSDTOOLKIT_OT_set_object_properties(Operator):#指定されたオブジェクトのPSDTOOLKIT_psd_object_propertiesに要素を上書き更新。
@@ -95,4 +102,7 @@ class PSDTOOLKIT_OT_set_object_properties(Operator):#指定されたオブジェ
                 item.y = self.y
                 item.visible = self.visible
                 item.layer_name = self.layer_name
+        else:
+            self.report({ 'ERROR' }, "The psd plane can't be found")
+            return { 'CANCELLED' }
         return {'FINISHED'}

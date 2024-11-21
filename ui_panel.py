@@ -27,22 +27,54 @@ class PSDTOOL_PT_main_panel(Panel):
     bl_category = 'PSD Toolkit'
 
     def draw(self, context):#描画内容
-        layout = self.layout
+        #情報取得
         scene = context.scene
-        psd_props = ["a","b"]#scene.PSDTOOLKIT_scene_properties
+        active_object = context.active_object
+        is_active_object_psd = False
+        psd_info_in_scene = None
+        for psd_obj in scene.PSDTOOLKIT_scene_properties.psd_list:
+            if active_object.data.name == psd_obj.objectname:
+                is_active_object_psd = True
+                psd_info_in_scene = psd_obj
+                break
+            else:
+                is_active_object_psd = False
+
+        #描画
+        layout = self.layout.column()#縦に詰める箱を追加（一列だけ）
+
+        # コントロールパネル
+        row = layout.row()#横に並べられる箱を追加（一行だけ）
+        row.label(text="ここにコントロールパネルを表示")
 
         # 画像の表示
         row = layout.row()
-        row.label(text="Image Display:")
-        row.template_preview(context.active_object, show_buttons=False)  # アクティブオブジェクトのプレビュー
+        row.label(text="ここに画像を表示")
+        if is_active_object_psd:
+            row.template_preview(context.active_object, show_buttons=False)
 
-        # PSD項目リスト
-        # layout.label(text="PSD Items:")
-        # for i, item in enumerate(psd_props.psd_list):
-        #     row = layout.row(align=True)
-        #     row.prop(item, "name", text="")  # 項目の名前表示
-        #     op = row.operator("psdtoolkit.toggle_visibility", text="", icon="HIDE_ON" if item.visible else "HIDE_OFF")
-        #     op.index = i  # トグルボタンのインデックスを設定
+        # レイヤー一覧
+        col = layout.column()
+        row = col.row()
+        row.label(text="ここにレイヤー一覧を表示")
+        if is_active_object_psd:
+            group_layer_table = col.column()
+            group_layer_table_item = group_layer_table.row()
+            group_layer_table_item.label(text="ここにグループレイヤー一覧を表示")
+            psd_info = active_object.PSDTOOLKIT_psd_object_properties
+            group_layer_table_item = group_layer_table.row()
+            group_layer_table_item.template_list(#その中にリストUIを作成
+                "UI_UL_list",  # リストタイプの名前を文字列として渡す
+                "custom_list_id",
+                psd_info, "psdtoolkit_layer_info",#リストのデータソースで、
+                psd_info_in_scene, "active_group_layer_index",#アクティブなアイテムのインデクス。
+            )
+            # layout.label(text="PSD Items:")
+            # for i, item in enumerate(psd_props.psd_list):
+            #     row = layout.row(align=True)
+            #     row.prop(item, "name", text="")  # 項目の名前表示
+            #     op = row.operator("psdtoolkit.toggle_visibility", text="", icon="HIDE_ON" if item.visible else "HIDE_OFF")
+            #     op.index = i  # トグルボタンのインデックスを設定
 
 # class MMDDisplayItemsPanel(Panel):
 #     bl_label = "PSD Toolkit"

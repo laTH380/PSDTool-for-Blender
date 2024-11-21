@@ -58,7 +58,7 @@ def _make_image(psd,psd_info):
                     if layer_info["visible"]:
                         layer_image = psd[group_index][layer_index].composite()
                         combined_image.paste(layer_image, (layer_info["x"], layer_info["y"]), layer_image)
-    combined_image.show()
+    # combined_image.show()
     return combined_image
 
 if __name__ == "__main__":
