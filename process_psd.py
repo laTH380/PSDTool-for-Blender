@@ -18,18 +18,20 @@ import bpy
 #Blenderオペレータから呼ばれる関数
 def make_psd_data(psd_path):
     psd = PSDImage.open(psd_path)
-    psd_info, layer_images = _first_process_psd(psd)
+    psd_info, layer_images, layer_nums = _first_process_psd(psd)
     first_image = _make_image(psd,psd_info)
     name = os.path.basename(psd_path)
-    return first_image, layer_images, psd_info, name
+    return first_image, layer_images, psd_info, name, layer_nums
 
 
 def _first_process_psd(psd):
     psd_info = []
     layer_images = []#psd_infoと同じ構造でレイヤーごとの画像データが入っている
+    layer_nums = []#psd_infoと同じ構造でレイヤーの数が入っている[0,0,0,1...]0はグループでない場合、それ以外はサブレイヤーの数
     for index,layer in enumerate(psd):
         psd_info.append({"x":layer.left, "y":layer.top, "visible":layer.visible, "name":layer.name})
         if layer.is_group():# レイヤーがグループの場合、その中のレイヤーも処理
+            layer_nums.append(len(layer))
             sublayer_info = []
             sublayer_images = []
             for sublayer in layer:
@@ -39,9 +41,10 @@ def _first_process_psd(psd):
             psd_info[index]["sublayer"] = sublayer_info
             layer_images.append(sublayer_images)
         else:
+            layer_nums.append(0)
             psd_info[index]["sublayer"] = None
             layer_images.append([layer.composite()])
-    return psd_info, layer_images
+    return psd_info, layer_images, layer_nums
 
 def _make_image(psd,psd_info):
     combined_image = Image.new('RGBA', psd.size)

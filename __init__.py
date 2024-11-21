@@ -65,17 +65,20 @@ translations = {
 }
 
 classes = (
-    #data
+    #property
     control_property.PSDTOOLKIT_scene_properties_psdlist_item,
     control_property.PSDTOOLKIT_scene_properties,
-    control_property.PSDTOOLKIT_object_properties_layer_info_item,
-    control_property.PSDTOOLKIT_object_properties_layer_info,
-    control_property.PSDTOOLKIT_object_properties,
+    control_property.PSDTOOLKIT_psd_object_properties_sub_layer,
+    control_property.PSDTOOLKIT_psd_object_properties_group_layer,
+    control_property.PSDTOOLKIT_psd_object_properties,
     #ui
-    ui_panel.PSDTOOL_PT_main_panel,
+    # ui_panel.PSDTOOL_PT_main_panel,
+    # ui_panel.MMDDisplayItemsPanel,
+    ui_panel.PSDTOOL_PT_Panel,
     #operator
     control_property.PSDTOOLKIT_OT_add_scene_properties_psd_list,
-    control_property.PSDTOOLKIT_OT_add_object_properties_layer_info,
+    control_property.PSDTOOLKIT_OT_make_object_properties,
+    control_property.PSDTOOLKIT_OT_set_object_properties,
     io_import_psd_as_planes.PSDTOOLKIT_OT_import_psd
 )
 
@@ -87,7 +90,7 @@ def register():
         bpy.utils.register_class(c)
     bpy.app.translations.register(__name__, translations)
     bpy.types.Scene.PSDTOOLKIT_scene_properties = PointerProperty(type=control_property.PSDTOOLKIT_scene_properties)
-    bpy.types.Object.PSDTOOLKIT_object_properties = PointerProperty(type=control_property.PSDTOOLKIT_object_properties)
+    bpy.types.Object.PSDTOOLKIT_object_properties = PointerProperty(type=control_property.PSDTOOLKIT_psd_object_properties)
     bpy.types.TOPBAR_MT_file_import.append(import_psds_button)
     bpy.types.VIEW3D_MT_image_add.append(import_psds_button)
     bpy.utils.register_class(ui_panel.PSDTOOL_PT_main_panel)
