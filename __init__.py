@@ -68,8 +68,11 @@ classes = (
     #property
     control_property.PSDTOOLKIT_scene_properties_psdlist_item,
     control_property.PSDTOOLKIT_scene_properties,
-    control_property.PSDTOOLKIT_psd_object_properties_sub_layer,
-    control_property.PSDTOOLKIT_psd_object_properties_group_layer,
+    control_property.PSDTOOLKIT_psd_object_properties_sub4_layer,
+    control_property.PSDTOOLKIT_psd_object_properties_sub3_layer,
+    control_property.PSDTOOLKIT_psd_object_properties_sub2_layer,
+    control_property.PSDTOOLKIT_psd_object_properties_sub1_layer,
+    control_property.PSDTOOLKIT_psd_object_properties_top_layer,
     control_property.PSDTOOLKIT_psd_object_properties,
     #ui
     # ui_panel.PSDTOOL_PT_main_panel,

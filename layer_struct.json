@@ -1,0 +1,1219 @@
+[
+    {
+        "x": 195,
+        "y": 605,
+        "visible": true,
+        "name": "!Body",
+        "sublayer": [
+            {
+                "x": 669,
+                "y": 605,
+                "visible": false,
+                "name": "*\u30a4\u30f3\u30ca\u30fc",
+                "sublayer": null
+            },
+            {
+                "x": 765,
+                "y": 591,
+                "visible": false,
+                "name": "*\u30a4\u30f3\u30ca\u30fc:flipx",
+                "sublayer": null
+            },
+            {
+                "x": 427,
+                "y": 605,
+                "visible": false,
+                "name": "*\u901a\u5e38\u8863\u88c5",
+                "sublayer": null
+            },
+            {
+                "x": 427,
+                "y": 591,
+                "visible": false,
+                "name": "*\u901a\u5e38\u8863\u88c5:flipx",
+                "sublayer": null
+            },
+            {
+                "x": 195,
+                "y": 605,
+                "visible": true,
+                "name": "*AI\u8863\u88c5",
+                "sublayer": null
+            },
+            {
+                "x": 195,
+                "y": 591,
+                "visible": false,
+                "name": "*AI\u8863\u88c5:flipx",
+                "sublayer": null
+            },
+            {
+                "x": 0,
+                "y": 0,
+                "visible": false,
+                "name": "*\u975e\u8868\u793a",
+                "sublayer": null
+            }
+        ]
+    },
+    {
+        "x": 0,
+        "y": 0,
+        "visible": false,
+        "name": "\u30c1\u30fc\u30af\u985e",
+        "sublayer": [
+            {
+                "x": 964,
+                "y": 994,
+                "visible": true,
+                "name": "\u30c1\u30fc\u30af1",
+                "sublayer": null
+            },
+            {
+                "x": 981,
+                "y": 1066,
+                "visible": false,
+                "name": "\u30c1\u30fc\u30af2",
+                "sublayer": null
+            },
+            {
+                "x": 964,
+                "y": 997,
+                "visible": false,
+                "name": "\u8d64\u97621",
+                "sublayer": null
+            },
+            {
+                "x": 964,
+                "y": 936,
+                "visible": false,
+                "name": "\u8d64\u97622",
+                "sublayer": null
+            },
+            {
+                "x": 964,
+                "y": 993,
+                "visible": false,
+                "name": "\u982c\u67d3",
+                "sublayer": null
+            },
+            {
+                "x": 1013,
+                "y": 1093,
+                "visible": true,
+                "name": "\u982c\u30d6\u30e9\u30b7",
+                "sublayer": null
+            },
+            {
+                "x": 993,
+                "y": 1063,
+                "visible": false,
+                "name": "\u8d64\u9762\u30d6\u30e9\u30b7",
+                "sublayer": null
+            }
+        ]
+    },
+    {
+        "x": 960,
+        "y": 938,
+        "visible": true,
+        "name": "!\u8868\u60c5",
+        "sublayer": [
+            {
+                "x": 1110,
+                "y": 1171,
+                "visible": true,
+                "name": "!\u53e3",
+                "sublayer": [
+                    {
+                        "x": 1110,
+                        "y": 1171,
+                        "visible": true,
+                        "name": "*\u30c7\u30d5\u30a9\u30eb\u30c8\u9589\u3058",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1107,
+                        "y": 1163,
+                        "visible": false,
+                        "name": "*\u30c7\u30d5\u30a9\u30eb\u30c8\u958b\u304d",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1116,
+                        "y": 1179,
+                        "visible": false,
+                        "name": "*^",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1110,
+                        "y": 1178,
+                        "visible": false,
+                        "name": "*\u301c",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1105,
+                        "y": 1160,
+                        "visible": false,
+                        "name": "*\u3050\u3058\u3083\u3050\u3058\u3083",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1100,
+                        "y": 1158,
+                        "visible": false,
+                        "name": "*\u3042\u308f\u308f",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1108,
+                        "y": 1165,
+                        "visible": false,
+                        "name": "*\u306b\u3043",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1110,
+                        "y": 1173,
+                        "visible": false,
+                        "name": "*\u3044\u30fc",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1138,
+                        "y": 1179,
+                        "visible": false,
+                        "name": "*\u3061\u3047\u30fc",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1118,
+                        "y": 1157,
+                        "visible": false,
+                        "name": "*\u3052\u3063\u3071\u985e",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1106,
+                        "y": 1164,
+                        "visible": false,
+                        "name": "*\u306b\u3078\u3089",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1106,
+                        "y": 1164,
+                        "visible": false,
+                        "name": "*\u306b\u3078\u3089+\u3088\u3060\u308c",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1110,
+                        "y": 1176,
+                        "visible": false,
+                        "name": "*\u3046\u3078",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1114,
+                        "y": 1181,
+                        "visible": false,
+                        "name": "*\u3046\u30782",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1111,
+                        "y": 1174,
+                        "visible": false,
+                        "name": "*\u25a1(\u6a2a\u9577)",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1120,
+                        "y": 1176,
+                        "visible": false,
+                        "name": "*o(\u6a2a)",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1132,
+                        "y": 1173,
+                        "visible": false,
+                        "name": "*o",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1123,
+                        "y": 1181,
+                        "visible": false,
+                        "name": "*-",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1109,
+                        "y": 1159,
+                        "visible": false,
+                        "name": "*\u308f",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1105,
+                        "y": 1153,
+                        "visible": false,
+                        "name": "*\u308f(\u5927)",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1116,
+                        "y": 1158,
+                        "visible": false,
+                        "name": "*\u308f\u3041",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1107,
+                        "y": 1147,
+                        "visible": false,
+                        "name": "*\u307a\u308d\u3049",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1114,
+                        "y": 1167,
+                        "visible": false,
+                        "name": "*\u03c9",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1132,
+                        "y": 1168,
+                        "visible": false,
+                        "name": "*\u4e09\u89d2",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1110,
+                        "y": 1171,
+                        "visible": false,
+                        "name": "*-^-",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 0,
+                        "y": 0,
+                        "visible": false,
+                        "name": "*\u975e\u8868\u793a",
+                        "sublayer": null
+                    }
+                ]
+            },
+            {
+                "x": 960,
+                "y": 983,
+                "visible": true,
+                "name": "!\u76ee",
+                "sublayer": [
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": true,
+                        "name": "*\u30c7\u30d5\u30a9\u30eb\u30c8\u76ee",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 1013,
+                        "visible": false,
+                        "name": "*\u30a6\u30a4\u30f3\u30af\u5de6",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 967,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u30a6\u30a4\u30f3\u30af\u53f3",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u767d\u76ee",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 973,
+                        "y": 1007,
+                        "visible": false,
+                        "name": "*\u767d\u76ee2",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 986,
+                        "y": 1054,
+                        "visible": false,
+                        "name": "*\u9589\u3058_\u4e0b\u5f26",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 967,
+                        "y": 1036,
+                        "visible": false,
+                        "name": "*\u9589\u3058__\u7b11\u3044",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u2190",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u2192",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u2193",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u2191",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u7e2e\u5c0f\u76ee",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u7e2e\u5c0f\u76ee\u2190",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u7e2e\u5c0f\u76ee\u2192",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u7e2e\u5c0f\u76ee\u2193",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u7e2e\u5c0f\u76ee\u2191",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u7e2e\u5c0f\u76ee\u2191 \u2191",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u7e2e\u5c0f\u76ee_\u30c9\u30c3\u30c8",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u7e2e\u5c0f\u76ee_\u30c9\u30c3\u30c8\u2190",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u7e2e\u5c0f\u76ee_\u30c9\u30c3\u30c8\u2192",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u7e2e\u5c0f\u76ee_\u30c9\u30c3\u30c8\u2193",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u7e2e\u5c0f\u76ee_\u30c9\u30c3\u30c8\u2191",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u30cf\u30a4\u30e9\u30a4\u30c8\u5bb6\u51fa",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u30cf\u30a4\u30e9\u30a4\u30c8\u5bb6\u51fa\u2190",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u30cf\u30a4\u30e9\u30a4\u30c8\u5bb6\u51fa\u2192",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u30cf\u30a4\u30e9\u30a4\u30c8\u5bb6\u51fa\u2193",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u30cf\u30a4\u30e9\u30a4\u30c8\u5bb6\u51fa\u2191",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 962,
+                        "y": 995,
+                        "visible": false,
+                        "name": "*\u3084\u3084\u9589\u3058",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 962,
+                        "y": 995,
+                        "visible": false,
+                        "name": "*\u3084\u3084\u9589\u3058\u2190",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 962,
+                        "y": 995,
+                        "visible": false,
+                        "name": "*\u3084\u3084\u9589\u3058\u2192",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 962,
+                        "y": 995,
+                        "visible": false,
+                        "name": "*\u3084\u3084\u9589\u3058\u2193",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 962,
+                        "y": 995,
+                        "visible": false,
+                        "name": "*\u3084\u3084\u9589\u3058\u2191",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u30a6\u30eb\u30a6\u30eb",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u30cf\u30fc\u30c8",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u30b0\u30eb\u30b0\u30eb",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 983,
+                        "visible": false,
+                        "name": "*\u3057\u3044\u305f\u3051",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 999,
+                        "y": 1002,
+                        "visible": false,
+                        "name": "*oo",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 999,
+                        "y": 1002,
+                        "visible": false,
+                        "name": "*oo+\u6d99",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 995,
+                        "y": 1032,
+                        "visible": false,
+                        "name": "*\u865a\u7121",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 988,
+                        "y": 997,
+                        "visible": false,
+                        "name": "*\u30b0\u30eb\u30b0\u30eb2",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1029,
+                        "y": 1029,
+                        "visible": false,
+                        "name": "*\u30fb\u30fb",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 1031,
+                        "y": 1005,
+                        "visible": false,
+                        "name": "*||",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 976,
+                        "y": 1003,
+                        "visible": false,
+                        "name": "*><",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 989,
+                        "y": 1041,
+                        "visible": false,
+                        "name": "*--",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 982,
+                        "y": 1035,
+                        "visible": false,
+                        "name": "*\u4e09\u4e09",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 982,
+                        "y": 1035,
+                        "visible": false,
+                        "name": "*\u4e09\u4e09\u6d99",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 0,
+                        "y": 0,
+                        "visible": false,
+                        "name": "*\u975e\u8868\u793a",
+                        "sublayer": null
+                    }
+                ]
+            },
+            {
+                "x": 960,
+                "y": 938,
+                "visible": true,
+                "name": "!\u7709",
+                "sublayer": [
+                    {
+                        "x": 960,
+                        "y": 938,
+                        "visible": true,
+                        "name": "*\u7709\u30c7\u30d5\u30a9\u30eb\u30c8",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 959,
+                        "y": 920,
+                        "visible": false,
+                        "name": "*\u3084\u3084\u4e0a\u3052",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 964,
+                        "y": 947,
+                        "visible": false,
+                        "name": "*\u2513\u250f",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 963,
+                        "y": 938,
+                        "visible": false,
+                        "name": "*\u30cf",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 966,
+                        "y": 940,
+                        "visible": false,
+                        "name": "*/ |",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 961,
+                        "y": 950,
+                        "visible": false,
+                        "name": "*--",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 956,
+                        "y": 944,
+                        "visible": false,
+                        "name": "*\u3046\u30fc\u3093",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 957,
+                        "y": 936,
+                        "visible": false,
+                        "name": "*uu",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 946,
+                        "y": 931,
+                        "visible": false,
+                        "name": "*\\ /",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 960,
+                        "y": 938,
+                        "visible": false,
+                        "name": "*\u306f\u3041",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 963,
+                        "y": 938,
+                        "visible": false,
+                        "name": "*\u306f\u3041(\u9006)",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 0,
+                        "y": 0,
+                        "visible": false,
+                        "name": "*\u975e\u8868\u793a",
+                        "sublayer": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "x": 0,
+        "y": 0,
+        "visible": false,
+        "name": "\u8868\u60c5\u30aa\u30d7\u30b7\u30e7\u30f3",
+        "sublayer": [
+            {
+                "x": 972,
+                "y": 1052,
+                "visible": false,
+                "name": "\u6d99",
+                "sublayer": null
+            },
+            {
+                "x": 1248,
+                "y": 1154,
+                "visible": false,
+                "name": "\u6c57",
+                "sublayer": null
+            },
+            {
+                "x": 929,
+                "y": 753,
+                "visible": false,
+                "name": "\u6edd\u6c57",
+                "sublayer": null
+            },
+            {
+                "x": 964,
+                "y": 872,
+                "visible": false,
+                "name": "\u9752\u3056\u3081",
+                "sublayer": null
+            },
+            {
+                "x": 1198,
+                "y": 895,
+                "visible": false,
+                "name": "\u9752\u3056\u3081(\u7dda)",
+                "sublayer": null
+            },
+            {
+                "x": 964,
+                "y": 872,
+                "visible": false,
+                "name": "\u30c0\u30fc\u30af",
+                "sublayer": null
+            },
+            {
+                "x": 989,
+                "y": 952,
+                "visible": false,
+                "name": "\u30c0\u30fc\u30af(\u4e2d\u592e)",
+                "sublayer": null
+            },
+            {
+                "x": 964,
+                "y": 872,
+                "visible": false,
+                "name": "\u8339\u86f8",
+                "sublayer": null
+            },
+            {
+                "x": 0,
+                "y": 0,
+                "visible": false,
+                "name": "\u30e1\u30ac\u30cd",
+                "sublayer": [
+                    {
+                        "x": 926,
+                        "y": 987,
+                        "visible": true,
+                        "name": "*\u9ed2",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 926,
+                        "y": 987,
+                        "visible": false,
+                        "name": "*\u30d4\u30f3\u30af",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 926,
+                        "y": 987,
+                        "visible": false,
+                        "name": "*\u9752",
+                        "sublayer": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "x": 693,
+        "y": 1353,
+        "visible": true,
+        "name": "!\u8155\u30dd\u30fc\u30ba",
+        "sublayer": [
+            {
+                "x": 0,
+                "y": 0,
+                "visible": false,
+                "name": "*\u30a4\u30f3\u30ca\u30fc\u8155",
+                "sublayer": [
+                    {
+                        "x": 426,
+                        "y": 1353,
+                        "visible": true,
+                        "name": "*\u901a\u5e38",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 263,
+                        "y": 158,
+                        "visible": false,
+                        "name": "*\u30d0\u30f3\u30b6\u30a4",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 719,
+                        "y": 1345,
+                        "visible": false,
+                        "name": "*\u8155\u7d44\u307f",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 694,
+                        "y": 1225,
+                        "visible": false,
+                        "name": "*\u3048\u30fc\u3068",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 694,
+                        "y": 1225,
+                        "visible": false,
+                        "name": "*\u3048\u30fc\u3068B",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 635,
+                        "y": 1266,
+                        "visible": false,
+                        "name": "*\u305d\u308c\u306f\u306d_\u5de6\u8155",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 426,
+                        "y": 1266,
+                        "visible": false,
+                        "name": "*\u305d\u308c\u306f\u306d_\u5de6\u8155B",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 513,
+                        "y": 1335,
+                        "visible": false,
+                        "name": "*\u305d\u308c\u306f\u306d_\u53f3\u8155",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 513,
+                        "y": 1335,
+                        "visible": false,
+                        "name": "*\u305d\u308c\u306f\u306d_\u53f3\u8155B",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 0,
+                        "y": 0,
+                        "visible": false,
+                        "name": "*\u975e\u8868\u793a",
+                        "sublayer": null
+                    }
+                ]
+            },
+            {
+                "x": 693,
+                "y": 1353,
+                "visible": true,
+                "name": "*AI\u8863\u88c5\u8155",
+                "sublayer": [
+                    {
+                        "x": 693,
+                        "y": 1353,
+                        "visible": true,
+                        "name": "*\u901a\u5e38",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 693,
+                        "y": 1353,
+                        "visible": false,
+                        "name": "*\u901a\u5e38:flipx",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 263,
+                        "y": 158,
+                        "visible": false,
+                        "name": "*\u30d0\u30f3\u30b6\u30a4",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 719,
+                        "y": 1345,
+                        "visible": false,
+                        "name": "*\u8155\u7d44\u307f",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 694,
+                        "y": 1225,
+                        "visible": false,
+                        "name": "*\u3048\u30fc\u3068",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 694,
+                        "y": 1225,
+                        "visible": false,
+                        "name": "*\u3048\u30fc\u3068B",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 635,
+                        "y": 1266,
+                        "visible": false,
+                        "name": "*\u305d\u308c\u306f\u306d_\u5de6\u8155",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 635,
+                        "y": 1266,
+                        "visible": false,
+                        "name": "*\u305d\u308c\u306f\u306d_\u5de6\u8155:flipx",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 693,
+                        "y": 1266,
+                        "visible": false,
+                        "name": "*\u305d\u308c\u306f\u306d_\u5de6\u8155B",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 693,
+                        "y": 1266,
+                        "visible": false,
+                        "name": "*\u305d\u308c\u306f\u306d_\u5de6\u8155B:flipx",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 513,
+                        "y": 1335,
+                        "visible": false,
+                        "name": "*\u305d\u308c\u306f\u306d_\u53f3\u8155",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 513,
+                        "y": 1335,
+                        "visible": false,
+                        "name": "*\u305d\u308c\u306f\u306d_\u53f3\u8155:flipx",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 513,
+                        "y": 1335,
+                        "visible": false,
+                        "name": "*\u305d\u308c\u306f\u306d_\u53f3\u8155B",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 513,
+                        "y": 1335,
+                        "visible": false,
+                        "name": "*\u305d\u308c\u306f\u306d_\u53f3\u8155B:flipx",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 0,
+                        "y": 0,
+                        "visible": false,
+                        "name": "*\u975e\u8868\u793a",
+                        "sublayer": null
+                    }
+                ]
+            },
+            {
+                "x": 0,
+                "y": 0,
+                "visible": false,
+                "name": "*\u901a\u5e38\u8863\u88c5\u8155",
+                "sublayer": [
+                    {
+                        "x": 426,
+                        "y": 1348,
+                        "visible": true,
+                        "name": "*\u901a\u5e38",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 263,
+                        "y": 158,
+                        "visible": false,
+                        "name": "*\u30d0\u30f3\u30b6\u30a4",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 693,
+                        "y": 1338,
+                        "visible": false,
+                        "name": "*\u8155\u7d44\u307f",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 688,
+                        "y": 1225,
+                        "visible": false,
+                        "name": "*\u3048\u30fc\u3068",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 688,
+                        "y": 1225,
+                        "visible": false,
+                        "name": "*\u3048\u30fc\u3068B",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 618,
+                        "y": 1266,
+                        "visible": false,
+                        "name": "*\u305d\u308c\u306f\u306d_\u5de6\u8155",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 426,
+                        "y": 1266,
+                        "visible": false,
+                        "name": "*\u305d\u308c\u306f\u306d_\u5de6\u8155B",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 513,
+                        "y": 1335,
+                        "visible": false,
+                        "name": "*\u305d\u308c\u306f\u306d_\u53f3\u8155",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 513,
+                        "y": 1335,
+                        "visible": false,
+                        "name": "*\u305d\u308c\u306f\u306d_\u53f3\u8155B",
+                        "sublayer": null
+                    },
+                    {
+                        "x": 0,
+                        "y": 0,
+                        "visible": false,
+                        "name": "*\u975e\u8868\u793a",
+                        "sublayer": null
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "x": 0,
+        "y": 0,
+        "visible": true,
+        "name": "\u6f2b\u7b26",
+        "sublayer": [
+            {
+                "x": 1228,
+                "y": 773,
+                "visible": false,
+                "name": "\u6012",
+                "sublayer": null
+            },
+            {
+                "x": 709,
+                "y": 666,
+                "visible": false,
+                "name": "!",
+                "sublayer": null
+            },
+            {
+                "x": 507,
+                "y": 841,
+                "visible": false,
+                "name": "notice",
+                "sublayer": null
+            },
+            {
+                "x": 615,
+                "y": 824,
+                "visible": false,
+                "name": "\u306f\u30fc\u3068",
+                "sublayer": null
+            },
+            {
+                "x": 731,
+                "y": 917,
+                "visible": false,
+                "name": "\u304d\u3074\u30fc\u3093",
+                "sublayer": null
+            },
+            {
+                "x": 660,
+                "y": 715,
+                "visible": false,
+                "name": "\u30ad\u30e9\u30ad\u30e9",
+                "sublayer": null
+            },
+            {
+                "x": 577,
+                "y": 644,
+                "visible": false,
+                "name": "\u30ad\u30fc\u3063",
+                "sublayer": null
+            },
+            {
+                "x": 510,
+                "y": 770,
+                "visible": false,
+                "name": "?",
+                "sublayer": null
+            },
+            {
+                "x": 517,
+                "y": 764,
+                "visible": false,
+                "name": "?:flipx",
+                "sublayer": null
+            },
+            {
+                "x": 913,
+                "y": 628,
+                "visible": false,
+                "name": "\u6c34\u6ef4",
+                "sublayer": null
+            },
+            {
+                "x": 867,
+                "y": 495,
+                "visible": false,
+                "name": "\u3046\u301c\u3093",
+                "sublayer": null
+            },
+            {
+                "x": 570,
+                "y": 765,
+                "visible": false,
+                "name": "\u97f3\u7b26",
+                "sublayer": null
+            },
+            {
+                "x": 631,
+                "y": 793,
+                "visible": false,
+                "name": "\u82b1",
+                "sublayer": null
+            },
+            {
+                "x": 845,
+                "y": 675,
+                "visible": false,
+                "name": "\u30ac\u30bf\u30ac\u30bf",
+                "sublayer": null
+            }
+        ]
+    }
+]

@@ -32,29 +32,50 @@ class PSDTOOLKIT_OT_add_scene_properties_psd_list(Operator):#カスタムプロ�
         return {'FINISHED'}
     
 # psdオブジェクトプロパティ
-# 再帰的定義ができないので多層化はこれを増やしていかないといけない
-class PSDTOOLKIT_psd_object_properties_sub_layer(PropertyGroup):
+# 再帰的定義ができないので多層化はこれを増やしていかないといけない（5階層までサポート）
+class PSDTOOLKIT_psd_object_properties_sub4_layer(PropertyGroup):
     x: IntProperty(name="x", default=0)
     y: IntProperty(name="y", default=0)
     visible: BoolProperty(name="visible", default=True)
     layer_name: StringProperty(name="name", default="")
 
-class PSDTOOLKIT_psd_object_properties_group_layer(PropertyGroup):
-    sublayer: CollectionProperty(type=PSDTOOLKIT_psd_object_properties_sub_layer)
+class PSDTOOLKIT_psd_object_properties_sub3_layer(PropertyGroup):
+    sublayer: CollectionProperty(type=PSDTOOLKIT_psd_object_properties_sub4_layer)
+    x: IntProperty(name="x", default=0)
+    y: IntProperty(name="y", default=0)
+    visible: BoolProperty(name="visible", default=True)
+    layer_name: StringProperty(name="name", default="")
+
+class PSDTOOLKIT_psd_object_properties_sub2_layer(PropertyGroup):
+    sublayer: CollectionProperty(type=PSDTOOLKIT_psd_object_properties_sub3_layer)
+    x: IntProperty(name="x", default=0)
+    y: IntProperty(name="y", default=0)
+    visible: BoolProperty(name="visible", default=True)
+    layer_name: StringProperty(name="name", default="")
+
+class PSDTOOLKIT_psd_object_properties_sub1_layer(PropertyGroup):
+    sublayer: CollectionProperty(type=PSDTOOLKIT_psd_object_properties_sub2_layer)
+    x: IntProperty(name="x", default=0)
+    y: IntProperty(name="y", default=0)
+    visible: BoolProperty(name="visible", default=True)
+    layer_name: StringProperty(name="name", default="")
+
+class PSDTOOLKIT_psd_object_properties_top_layer(PropertyGroup):
+    sublayer: CollectionProperty(type=PSDTOOLKIT_psd_object_properties_sub1_layer)
     x: IntProperty(name="x", default=0)
     y: IntProperty(name="y", default=0)
     visible: BoolProperty(name="visible", default=True)
     layer_name: StringProperty(name="name", default="")
 
 class PSDTOOLKIT_psd_object_properties(PropertyGroup):
-    psdtoolkit_layer_info: CollectionProperty(type=PSDTOOLKIT_psd_object_properties_group_layer)
+    psdtoolkit_layer_info: CollectionProperty(type=PSDTOOLKIT_psd_object_properties_top_layer)
 
 class PSDTOOLKIT_OT_make_object_properties(Operator):#指定されたオブジェクトのPSDTOOLKIT_psd_object_propertiesの枠組みを作成
     bl_idname = "psdtoolkit.make_psd_object_properties"
     bl_label = "psdtoolkit.make_psd_object_properties"
 
     object_data_name: StringProperty(name="object_data_name", default="object_data_name")
-    layer_nums: StringProperty(name="layer_nums", default="")#1,2,12,...のように親レイヤーごとのレイヤー数をカンマ区切りで指定
+    psd_struct: StringProperty(name="psd_struct", default="")#json形式でpsdの構造が入力される
 
     def execute(self, context):
         target_object = context.scene.objects.get(self.object_data_name)

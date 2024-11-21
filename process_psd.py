@@ -3,6 +3,7 @@ from PIL import Image
 import os
 
 import bpy
+import utils
 
 # import os
 # import sys
@@ -23,12 +24,15 @@ def make_psd_data(psd_path):
     name = os.path.basename(psd_path)
     return first_image, layer_images, psd_info, name, layer_nums
 
-
+max_depth = 0
 def _first_process_psd(psd):
     psd_info = []
     layer_images = []#psd_infoと同じ構造でレイヤーごとの画像データが入っている
     layer_nums = []#psd_infoと同じ構造でレイヤーの数が入っている[0,0,0,1...]0はグループでない場合、それ以外はサブレイヤーの数
+    layer_struct = []
     for index,layer in enumerate(psd):
+        layer_struct_item,_ = _recur_make_psd_struct(layer)
+        layer_struct.append(layer_struct_item)
         psd_info.append({"x":layer.left, "y":layer.top, "visible":layer.visible, "name":layer.name})
         if layer.is_group():# レイヤーがグループの場合、その中のレイヤーも処理
             layer_nums.append(len(layer))
@@ -44,7 +48,35 @@ def _first_process_psd(psd):
             layer_nums.append(0)
             psd_info[index]["sublayer"] = None
             layer_images.append([layer.composite()])
+    utils.save_json_file(layer_struct, "./layer_struct.json")
+    print(max_depth)
     return psd_info, layer_images, layer_nums
+
+def _recur_make_psd_struct(layer, depth=0):
+    depth = depth
+    global max_depth
+    if max_depth < depth:
+        max_depth = depth
+    if layer.is_group():
+        sublayer_struct = []
+        for sublayer in layer:
+            subsublayer_struct,depth = _recur_make_psd_struct(sublayer, depth+1)
+            sublayer_struct.append(subsublayer_struct)
+        layer_struct = _psd_layer_to_dict(layer.left, layer.top, layer.visible, layer.name, sublayer_struct)
+        return layer_struct, depth-1
+    else:
+        layer_struct = _psd_layer_to_dict(layer.left, layer.top, layer.visible, layer.name)
+        return layer_struct, depth-1
+
+def _psd_layer_to_dict(x, y, visible, name, sublayer=None):
+    result = {}
+    result["x"] = x
+    result["y"] = y
+    result["visible"] = visible
+    result["name"] = name
+    result["sublayer"] = sublayer
+    return result
+
 
 def _make_image(psd,psd_info):
     combined_image = Image.new('RGBA', psd.size)
