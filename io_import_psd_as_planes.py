@@ -979,6 +979,7 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
 
         #オブジェクトIDの管理,psdを処理してカスタムプロパティとして保持するデータとレイヤーごとの画像を用意,最初のテクスチャ画像の設定
         processed_psds = []#[[id,object_name(filename),[layer_struct],[layer_images]],...,]
+        ImageSpec_psds = []
         for index, psd in enumerate(psds):
             #psd_process
             first_image, layer_images, filename, layer_struct, max_depth = process_psd.make_psd_data(psd.image.filepath)
@@ -993,7 +994,7 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
             #初期画像のパック
             first_tex_name = make_name_for_psdtool(1, objectid, context.scene.frame_current)
             self.paccking_imageobject(first_image, first_tex_name)
-            psds[index] = ImageSpec(bpy.data.images.get(first_tex_name), psds[index].size, psds[index].frame_start, psds[index].frame_offset, psds[index].frame_duration)
+            ImageSpec_psds.append(ImageSpec(bpy.data.images.get(first_tex_name), psd.size, psd.frame_start, psd.frame_offset, psd.frame_duration))
 
         #レイヤー画像データのパック
         for index, processed_psd in enumerate(processed_psds):
@@ -1001,9 +1002,9 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
 
         # Create individual planes + カスタムプロパティをつける
         planes = []
-        for index, img_spec in enumerate(psds):
-            plane = self.single_image_spec_to_plane(context, img_spec, processed_psds[index][1], processed_psds[index][2])
-            self.add_object_property(processed_psds[index][1], processed_psds[index][3])
+        for index, img_spec in enumerate(ImageSpec_psds):
+            plane = self.single_image_spec_to_plane(context, img_spec, processed_psds[index][1])
+            self.add_object_property(processed_psds[index][1], processed_psds[index][2])
             planes.append(plane)
 
         context.view_layer.update()
@@ -1095,7 +1096,7 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
         os.remove(temp_image_path)
         
     # operate on a single image
-    def single_image_spec_to_plane(self, context, img_spec, object_name, object_data_name):
+    def single_image_spec_to_plane(self, context, img_spec, object_name, object_data_name=""):
 
         # Configure image
         self.apply_image_options(img_spec.image)
@@ -1106,7 +1107,7 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
             material = self.create_cycles_material(context, img_spec)
 
         # Create and position plane object
-        plane = self.create_image_plane(context, material.name, img_spec, object_name, object_data_name)
+        plane = self.create_image_plane(context, material.name, img_spec, object_name)
 
         # Assign Material
         plane.data.materials.append(material)
@@ -1230,7 +1231,7 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
 
     # -------------------------------------------------------------------------
     # Geometry Creation
-    def create_image_plane(self, context, material_name, img_spec, object_name, object_data_name):
+    def create_image_plane(self, context, material_name, img_spec, object_name, object_data_name=""):
 
         width, height = self.compute_plane_size(context, img_spec)
 
@@ -1241,7 +1242,7 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
         if plane.mode != 'OBJECT':
             bpy.ops.object.mode_set(mode='OBJECT')
         plane.dimensions = width, height, 0.0
-        plane.data.name = object_data_name
+        # plane.data.name = object_data_name
         plane.name = object_name
         bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
 
