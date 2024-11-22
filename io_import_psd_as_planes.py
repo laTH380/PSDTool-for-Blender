@@ -970,10 +970,10 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
                 print("psd以外は除去されました")#エラーメッセージとして表示
 
         #オブジェクトIDの管理,psdを処理してカスタムプロパティとして保持するデータとレイヤーごとの画像を用意,最初のテクスチャ画像の設定
-        processed_psds = []#[[id,object_name,object_data_name,[psd_info],[layer_images],[layer_nums]],...,]
+        processed_psds = []#[[id,object_name,object_data_name,[layer_struct],[layer_images]],...,]
         for index, psd in enumerate(psds):
             #psd_process
-            first_image, layer_images, psd_info, filename, layer_nums, layer_struct, max_depth = process_psd.make_psd_data(psd.image.filepath)
+            first_image, layer_images, filename, layer_struct, max_depth = process_psd.make_psd_data(psd.image.filepath)
             if max_depth > 5:
                 self.report({'ERROR'}, f"レイヤーの深さが5以上です。")
                 continue
