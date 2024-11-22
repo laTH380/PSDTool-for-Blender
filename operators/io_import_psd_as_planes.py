@@ -30,7 +30,7 @@ from itertools import count, repeat
 from collections import namedtuple
 from math import pi
 
-import process_psd
+from core import process_psd
 import utils
 
 import bpy

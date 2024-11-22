@@ -2,9 +2,7 @@
 import bpy
 from bpy.props import PointerProperty
 
-from . import io_import_psd_as_planes
 from . import psd_obj
-
 
 classes = (
     psd_obj.PSDTOOLKIT_scene_properties_psdlist_item,

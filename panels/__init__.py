@@ -5,7 +5,7 @@ from . import tool
 classes = (
     tool.PSDTOOL_UL_display_toplayer_frames,
     tool.PSDTOOL_UL_display_sub1layer_frames,
-    tool.PSDTOOL_PT_Panel,
+    tool.PSDTOOL_PT_main_panel,
 )
 
 def register():
