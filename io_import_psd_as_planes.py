@@ -37,6 +37,7 @@ import bpy
 from bpy.types import Operator
 from bpy.app.translations import pgettext_tip as tip_
 from mathutils import Vector
+from typing import List
 
 from bpy.props import (
     StringProperty,
@@ -595,10 +596,17 @@ def setup_compositing(context, plane, img_spec):
     context.view_layer.update()
 
 #PSDToolKitで使用する画像の名付け用
-def make_name_for_psdtool(kindID, objectID, ID1=-1, ID2=-1):
+def make_name_for_psdtool(kindID: int=0, frame: int=0, layer_index: List[int]=[0,0,0,0,0]):
+    objectID = 0
+    ID1 = 0
+    ID2 = 0
     name = "PSDToolKit_"
     if kindID == 0:#レイヤー画像用ネーミング
-        name += str(objectID) + "_layer_" + str(ID1) + "_" + str(ID2)
+        layer_name = ""
+        for layer_length in layer_index:
+            str_layer_length = str(layer_length).zfill(3)
+            layer_name += str_layer_length
+        name += "_layer_" + layer_name
     elif kindID == 1:#テクスチャ画像ネーミング
         name += str(objectID) + "_frame_" + str(ID1)
     elif kindID == 2:#オブジェクトデータネーミング
@@ -970,7 +978,7 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
                 print("psd以外は除去されました")#エラーメッセージとして表示
 
         #オブジェクトIDの管理,psdを処理してカスタムプロパティとして保持するデータとレイヤーごとの画像を用意,最初のテクスチャ画像の設定
-        processed_psds = []#[[id,object_name,object_data_name,[layer_struct],[layer_images]],...,]
+        processed_psds = []#[[id,object_name(filename),[layer_struct],[layer_images]],...,]
         for index, psd in enumerate(psds):
             #psd_process
             first_image, layer_images, filename, layer_struct, max_depth = process_psd.make_psd_data(psd.image.filepath)
@@ -979,9 +987,9 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
                 continue
             objectid = len(context.scene.PSDTOOLKIT_scene_properties.psd_list)
             object_data_name = make_name_for_psdtool(2,objectid)
-            processed_psds.append([objectid, filename, object_data_name, layer_struct, layer_images])
+            processed_psds.append([objectid, filename, layer_struct, layer_images])
             #オブジェクトリスト管理
-            bpy.ops.psdtoolkit.add_scene_properties_psd_list(objectname = object_data_name)
+            # bpy.ops.psdtoolkit.add_scene_properties_psd_list(objectname = object_data_name)
             #初期画像のパック
             first_tex_name = make_name_for_psdtool(1, objectid, context.scene.frame_current)
             self.paccking_imageobject(first_image, first_tex_name)
@@ -989,10 +997,7 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
 
         #レイヤー画像データのパック
         for index, processed_psd in enumerate(processed_psds):
-            for layer_index, layer_image in enumerate(processed_psd[4]):
-                for sublayer_index, sublayer in enumerate(layer_image):
-                    name = make_name_for_psdtool(0,processed_psd[0],layer_index,sublayer_index)
-                    self.paccking_imageobject(sublayer, name)
+            self.recur_paccking_imageobject(processed_psd[3], [0,0,0,0,0])
 
         # Create individual planes + カスタムプロパティをつける
         planes = []
@@ -1055,6 +1060,19 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
         #                 visible=sub_layer["visible"],
         #                 layer_name=sub_layer["name"]
         #             )
+    
+    # 再帰的に画像パック関数を呼び出しlayer_imagesのレイヤーごとの画像を保存
+    def recur_paccking_imageobject(self, layer_images, layer_index, depth=0):#layer_index=[0,0,0,0,0]
+        for layer_image in layer_images:
+            layer_index[depth] += 1
+            if len(layer_image) == 1:
+                layer_image_obj = layer_image[0]
+                name = make_name_for_psdtool(kindID=0, layer_index=layer_index)
+                self.paccking_imageobject(layer_image_obj, name)
+            else:
+                self.recur_paccking_imageobject(layer_image, layer_index, depth+1)
+        layer_index[depth] = 0
+        return
 
     #　paccking image object to .blend file
     def paccking_imageobject(self, image, name):
