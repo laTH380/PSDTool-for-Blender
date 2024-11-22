@@ -7,10 +7,14 @@ class PSDTOOL_OT_toggle_visibility(Operator):
     bl_idname = "psdtool.toggle_visibility"
     bl_label = "Toggle Visibility"
 
-    index: IntProperty()  # インデックスをプロパティとして追加
+    layer_index: IntProperty()  # 第何層目を操作されたか0~4
 
     def execute(self, context):
         obj = context.active_object
-        layer = obj.PSDTOOLKIT_psd_object_properties.sublayer[self.index]
-        layer.visible = not layer.visible
+        target_parent = obj.PSDTOOLKIT_psd_object_properties
+        target = target_parent.sublayer
+        for i in range(self.layer_index):
+            target_parent = target_parent.sublayer
+            target = target.sublayer
+        target[target_parent.active_layer_index].visible = not target[target_parent.active_layer_index].visible
         return {'FINISHED'}
