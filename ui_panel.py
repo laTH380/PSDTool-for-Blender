@@ -1,7 +1,39 @@
 import bpy
-from bpy.types import Panel
+from bpy.types import Panel, UIList
 
-  
+
+#カスタムリストUIの定義
+class PSDTOOL_UL_display_toplayer_frames(UIList):
+    def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
+        #item:与えられたリストの要素
+        if self.layout_type in {'DEFAULT'}:#表示形式をコントロールするblender標準の変数
+            row = layout.split(factor=0.8, align=True)
+            row.label(text=item.name, translate=False)
+            if item.visible:
+                row.label(text="", icon='HIDE_OFF')
+            else:
+                row.label(text="", icon='HIDE_ON')
+        elif self.layout_type in {'COMPACT'}:
+            pass
+        elif self.layout_type in {'GRID'}:
+            pass
+
+class PSDTOOL_UL_display_sub1layer_frames(UIList):
+    def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
+        #item:与えられたリストの要素
+        if self.layout_type in {'DEFAULT'}:#表示形式をコントロールするblender標準の変数
+            row = layout.split(factor=0.8, align=True)
+            row.label(text=item.name, translate=False)
+            if item.visible:
+                row.label(text="", icon='HIDE_OFF')
+            else:
+                row.label(text="", icon='HIDE_ON')
+        elif self.layout_type in {'COMPACT'}:
+            pass
+        elif self.layout_type in {'GRID'}:
+            pass
+
+
 class PSDTOOL_PT_Panel(Panel):#領域定義
     bl_space_type = "VIEW_3D" #ツールチップの説明文
     bl_region_type = "UI"
@@ -31,14 +63,11 @@ class PSDTOOL_PT_main_panel(Panel):
         scene = context.scene
         active_object = context.active_object
         is_active_object_psd = False
-        psd_info_in_scene = None
-        for psd_obj in scene.PSDTOOLKIT_scene_properties.psd_list:
-            if active_object.data.name == psd_obj.objectname:
-                is_active_object_psd = True
-                psd_info_in_scene = psd_obj
-                break
-            else:
-                is_active_object_psd = False
+        if len(active_object.PSDTOOLKIT_psd_object_properties.sublayer)>=1:
+            is_active_object_psd = True
+        else:
+            print("no psd object properties")
+            is_active_object_psd = False
 
         #描画
         layout = self.layout.column()#縦に詰める箱を追加（一列だけ）
@@ -64,11 +93,22 @@ class PSDTOOL_PT_main_panel(Panel):
             psd_info = active_object.PSDTOOLKIT_psd_object_properties
             group_layer_table_item = group_layer_table.row()
             group_layer_table_item.template_list(#その中にリストUIを作成
-                "UI_UL_list",  # リストタイプの名前を文字列として渡す
-                "custom_list_id",
+                "PSDTOOL_UL_display_toplayer_frames",  # リストタイプの名前を文字列として渡す
+                "",
                 psd_info, "sublayer",#リストのデータソースで、
                 psd_info, "active_layer_index",#アクティブなアイテムのインデクス。
             )
+
+            sub1_layer = psd_info.sublayer[psd_info.active_layer_index]
+            if len(sub1_layer.sublayer)>=1:
+                group_layer_table_item = group_layer_table.row()
+                group_layer_table_item.template_list(#その中にリストUIを作成
+                    "PSDTOOL_UL_display_sub1layer_frames",  # リストタイプの名前を文字列として渡す
+                    "",
+                    sub1_layer, "sublayer",#リストのデータソースで、
+                    sub1_layer, "active_layer_index",#アクティブなアイテムのインデクス。
+                )
+
             # layout.label(text="PSD Items:")
             # for i, item in enumerate(psd_props.psd_list):
             #     row = layout.row(align=True)

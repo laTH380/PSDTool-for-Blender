@@ -77,6 +77,8 @@ classes = (
     #ui
     # ui_panel.PSDTOOL_PT_main_panel,
     # ui_panel.MMDDisplayItemsPanel,
+    ui_panel.PSDTOOL_UL_display_toplayer_frames,
+    ui_panel.PSDTOOL_UL_display_sub1layer_frames,
     ui_panel.PSDTOOL_PT_Panel,
     #operator
     control_property.PSDTOOLKIT_OT_add_scene_properties_psd_list,
