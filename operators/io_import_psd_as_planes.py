@@ -30,14 +30,14 @@ from itertools import count, repeat
 from collections import namedtuple
 from math import pi
 
-from core import process_psd
+from core import config, processing_psd
 import utils
 
 import bpy
 from bpy.types import Operator
 from bpy.app.translations import pgettext_tip as tip_
 from mathutils import Vector
-from typing import List
+
 
 from bpy.props import (
     StringProperty,
@@ -595,27 +595,6 @@ def setup_compositing(context, plane, img_spec):
 
     context.view_layer.update()
 
-#PSDToolKitで使用する画像の名付け用
-def make_name_for_psdtool(kindID: int=0, frame: int=0, layer_index: List[int]=[0,0,0,0,0]):
-    objectID = 0
-    ID1 = 0
-    ID2 = 0
-    name = "PSDToolKit_"
-    if kindID == 0:#レイヤー画像用ネーミング
-        layer_name = ""
-        for layer_length in layer_index:
-            str_layer_length = str(layer_length).zfill(3)
-            layer_name += str_layer_length
-        name += "_layer_" + layer_name
-    elif kindID == 1:#テクスチャ画像ネーミング
-        name += str(objectID) + "_frame_" + str(ID1)
-    elif kindID == 2:#オブジェクトデータネーミング
-        name += str(objectID) + "_mesh"
-    else:
-        print("naming error")
-    return name
-
-
 # -----------------------------------------------------------------------------
 # Operator
 
@@ -982,17 +961,17 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
         ImageSpec_psds = []
         for index, psd in enumerate(psds):
             #psd_process
-            first_image, layer_images, filename, layer_struct, max_depth = process_psd.make_psd_data(psd.image.filepath)
+            first_image, layer_images, filename, layer_struct, max_depth = processing_psd.make_psd_data_from_psd(psd.image.filepath)
             if max_depth > 5:
                 self.report({'ERROR'}, f"レイヤーの深さが5以上です。")
                 continue
             objectid = len(context.scene.PSDTOOLKIT_scene_properties.psd_list)
-            object_data_name = make_name_for_psdtool(2,objectid)
+            object_data_name = config.make_name_for_psdtool(2,objectid)
             processed_psds.append([objectid, filename, layer_struct, layer_images])
             #オブジェクトリスト管理
             # bpy.ops.psdtoolkit.add_scene_properties_psd_list(objectname = object_data_name)
             #初期画像のパック
-            first_tex_name = make_name_for_psdtool(1, objectid, context.scene.frame_current)
+            first_tex_name = config.make_name_for_psdtool(1, objectid, context.scene.frame_current)
             self.paccking_imageobject(first_image, first_tex_name)
             ImageSpec_psds.append(ImageSpec(bpy.data.images.get(first_tex_name), psd.size, psd.frame_start, psd.frame_offset, psd.frame_duration))
 
@@ -1068,7 +1047,7 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
             layer_index[depth] += 1
             if len(layer_image) == 1:
                 layer_image_obj = layer_image[0]
-                name = make_name_for_psdtool(kindID=0, layer_index=layer_index)
+                name = config.make_name_for_psdtool(kindID=0, layer_index=layer_index)
                 self.paccking_imageobject(layer_image_obj, name)
             else:
                 self.recur_paccking_imageobject(layer_image, layer_index, depth+1)
