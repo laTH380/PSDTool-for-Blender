@@ -46,18 +46,27 @@ class PSDTOOL_OT_toggle_visibility(Operator):
     bl_idname = "psdtool.toggle_visibility"
     bl_label = "Toggle Visibility"
 
-    layer_index: IntProperty(name="layer_index", default=0)  # 第何層目を操作されたか0~4
-    item_index: IntProperty(name="item_index", default=0) #何番目のアイテムを操作されたか
+    top1_index: IntProperty(name="top1_index", default=0)  # 何番目のアイテムを操作されたか 0は存在しないを意味し1から
+    sub1_index: IntProperty(name="sub1_index", default=0)
+    sub2_index: IntProperty(name="sub2_index", default=0)
+    sub3_index: IntProperty(name="sub3_index", default=0)
+    sub4_index: IntProperty(name="sub4_index", default=0)
 
     def execute(self, context):
-        obj = context.active_object
-        target_parent = obj.PSDTOOLKIT_psd_object_properties
-        target = target_parent.sublayer
-        for i in range(self.layer_index):
-            target_parent = target_parent.sublayer
-            target = target.sublayer
-        target_parent.active_layer_index = self.item_index
-        target[self.item_index].visible = not target[self.item_index].visible
+        layers_index = [self.top1_index, self.sub1_index, self.sub2_index, self.sub3_index, self.sub4_index]
+        target_obj = context.active_object
+        target_parent = target_obj.PSDTOOLKIT_psd_object_properties
+        target = target_parent.sublayer[layers_index[0]]
+        target_index = layers_index[0]
+        if layers_index[1] != 0:
+            for layer_index in layers_index[1:]:
+                if layer_index == 0:
+                    break
+                target_parent = target
+                target = target.sublayer[layer_index]
+                target_index = layer_index
+        target_parent.active_layer_index = target_index
+        target.visible = not target.visible
 
-        update_tex(obj)
+        update_tex(target_obj)
         return {'FINISHED'}
