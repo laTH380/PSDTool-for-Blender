@@ -28,7 +28,19 @@ def make_image_from_psd_obj_prop():
 def update_tex(target_object):
     new_image = make_image_from_psd_obj_prop()
     new_tex_name = texture.paccking_merged_image_to_blender(new_image)
-    pass
+    new_tex = bpy.data.images.get(new_tex_name)
+    # オブジェクトのすべてのマテリアルをループ
+    for mat in target_object.data.materials:
+        if mat and mat.use_nodes:
+            # ノードツリー内のすべてのノードをループ
+            for node in mat.node_tree.nodes:
+                if node.type == 'TEX_IMAGE':
+                    node.image = new_tex
+        elif mat:
+            # ノードを使用していない場合の対応
+            for tex_slot in mat.texture_slots:
+                if tex_slot and tex_slot.texture.type == 'IMAGE':
+                    tex_slot.texture.image = new_tex
 
 class PSDTOOL_OT_toggle_visibility(Operator):
     bl_idname = "psdtool.toggle_visibility"
