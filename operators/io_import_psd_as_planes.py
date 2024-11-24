@@ -957,17 +957,17 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
                 print("psd以外は除去されました")#エラーメッセージとして表示
 
         #オブジェクトIDの管理,psdを処理してカスタムプロパティとして保持するデータとレイヤーごとの画像を用意,最初のテクスチャ画像の設定
-        processed_psds = []#[[id,object_name(filename),[layer_struct],[layer_images]],...,]
+        processed_psds = []#[[id,psd_info{name,size},[layer_struct],[layer_images]],...,]
         ImageSpec_psds = []
         for index, psd in enumerate(psds):
             #psd_process
-            first_image, layer_images, filename, layer_struct, max_depth = processing_psd.make_psd_data_from_psd(psd.image.filepath)
+            psd_info, first_image, layer_images, layer_struct, max_depth = processing_psd.make_psd_data_from_psd(psd.image.filepath)
             if max_depth > 5:
                 self.report({'ERROR'}, f"レイヤーの深さが5以上です。")
                 continue
             objectid = len(context.scene.PSDTOOLKIT_scene_properties.psd_list)
             object_data_name = config.make_name_for_psdtool(2,objectid)
-            processed_psds.append([objectid, filename, layer_struct, layer_images])
+            processed_psds.append([objectid, psd_info, layer_struct, layer_images])
             #オブジェクトリスト管理
             # bpy.ops.psdtoolkit.add_scene_properties_psd_list(objectname = object_data_name)
             #初期画像のパック
@@ -982,7 +982,7 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
         # Create individual planes + カスタムプロパティをつける
         planes = []
         for index, img_spec in enumerate(ImageSpec_psds):
-            plane = self.single_image_spec_to_plane(context, img_spec, processed_psds[index][1])
+            plane = self.single_image_spec_to_plane(context, img_spec, processed_psds[index][1]["name"])
             self.add_object_property(processed_psds[index][1], processed_psds[index][2])
             planes.append(plane)
 
@@ -1009,9 +1009,14 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
 
 
     #　プレーンにpsd情報のカスタムプロパティを設定
-    def add_object_property(self, object_name, layer_struct):
+    def add_object_property(self, psd_info, layer_struct):
         layer_struct_string = utils.dict2jsonstring(layer_struct)
-        bpy.ops.psdtoolkit.make_psd_object_properties(layer_struct=layer_struct_string, object_name=object_name)
+        bpy.ops.psdtoolkit.make_psd_object_properties(
+            layer_struct=layer_struct_string, 
+            object_name=psd_info["name"], 
+            psd_size_x=psd_info["size"][0],
+            psd_size_y=psd_info["size"][1]
+        )
         # for group_layer_index, group_layer in enumerate(psd_info):
         #     if group_layer["sublayer"] is None:#グループレイヤーでない最上位レイヤー
         #         bpy.ops.psdtoolkit.set_psd_object_properties(

@@ -82,6 +82,8 @@ class PSDTOOLKIT_OT_make_object_properties(Operator):#指定されたオブジ�
     bl_label = "psdtoolkit.make_psd_object_properties"
 
     object_name: StringProperty(name="object_name", default="object_name")
+    psd_size_x: IntProperty(name="psd_size", default=0)
+    psd_size_y: IntProperty(name="psd_size", default=0)
     layer_struct: StringProperty(name="psd_struct", default="")#json文字列でpsdの構造情報が入力される
 
     def execute(self, context):

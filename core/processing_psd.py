@@ -13,8 +13,8 @@ def make_psd_data_from_psd(psd_path):
     psd = PSDImage.open(psd_path)
     psd_info, layer_images, layer_struct, max_depth = _first_process_psd(psd)
     first_image = _make_image_from_psd_data(psd_info, layer_struct, layer_images)
-    name = os.path.basename(psd_path)
-    return first_image, layer_images, name, layer_struct, max_depth
+    psd_info["name"] = os.path.basename(psd_path)
+    return psd_info, first_image, layer_images, layer_struct, max_depth #psd_info = {name, size}
 
 def _first_process_psd(psd):
     layer_struct = []
@@ -72,6 +72,8 @@ def _recur_make_image_psd_data(layer, combined_image, layer_images):
             for sublayer_index, sublayer in enumerate(layer["sublayer"]):
                 combined_image = _recur_make_image_psd_data(sublayer, combined_image, layer_images[sublayer_index])
     return combined_image
+
+
 
 if __name__ == "__main__":
     make_psd_data_from_psd("./test/小春六花ver1.1_めじろーす_im11070159.psd")
