@@ -20,17 +20,13 @@
 # def execute(self, context):#これがメインの処理。このオペレータが呼び出されるとこれが実行される
 # ######################################
 
-
-import os
-import io
 import warnings
 import re
-import tempfile
 from itertools import count, repeat
 from collections import namedtuple
 from math import pi
 
-from core import config, processing_psd
+from core import config, processing_psd, texture
 import utils
 
 import bpy
@@ -972,7 +968,7 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
             # bpy.ops.psdtoolkit.add_scene_properties_psd_list(objectname = object_data_name)
             #初期画像のパック
             first_tex_name = config.make_name_for_psdtool(1, objectid, context.scene.frame_current)
-            self.paccking_imageobject(first_image, first_tex_name)
+            texture.paccking_image_to_blender(first_image, first_tex_name)
             ImageSpec_psds.append(ImageSpec(bpy.data.images.get(first_tex_name), psd.size, psd.frame_start, psd.frame_offset, psd.frame_duration))
 
         #レイヤー画像データのパック
@@ -1053,31 +1049,11 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
             if len(layer_image) == 1:
                 layer_image_obj = layer_image[0]
                 name = config.make_name_for_psdtool(kindID=0, layer_index=layer_index)
-                self.paccking_imageobject(layer_image_obj, name)
+                texture.paccking_image_to_blender(layer_image_obj, name)
             else:
                 self.recur_paccking_imageobject(layer_image, layer_index, depth+1)
         layer_index[depth] = 0
         return
-
-    #　paccking image object to .blend file
-    def paccking_imageobject(self, image, name):
-        # Blenderの一時ディレクトリを取得
-        temp_dir = tempfile.mkdtemp(prefix='blender_temp_')
-        # 仮の画像ファイルパスを作成
-        temp_image_path = os.path.join(temp_dir, name + ".png")
-        # 仮の画像データを一時ファイルに保存
-        image.save(temp_image_path, format="PNG")
-        # 画像をBlenderにロード,パック
-        loaded_image = bpy.data.images.load(temp_image_path)
-        loaded_image.name = name
-        loaded_image.pack()
-        # パックが成功したかどうかを確認
-        if loaded_image.packed_file:
-            print(f"Image '{loaded_image.name}' is packed into the .blend file.")
-        else:
-            print(f"Failed to pack image '{loaded_image.name}' into the .blend file.")
-        # 一時ファイルを削除する
-        os.remove(temp_image_path)
         
     # operate on a single image
     def single_image_spec_to_plane(self, context, img_spec, object_name, object_data_name=""):

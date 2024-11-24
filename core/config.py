@@ -13,7 +13,7 @@ def make_name_for_psdtool(kindID: int=0, frame: int=0, layer_index: List[int]=[0
             layer_name += str_layer_length
         name += "_layer_" + layer_name
     elif kindID == 1:#テクスチャ画像ネーミング
-        name += str(objectID) + "_frame_" + str(ID1)
+        name += "_frame_" + str(frame).zfill(7)
     elif kindID == 2:#オブジェクトデータネーミング
         name += str(objectID) + "_mesh"
     else:

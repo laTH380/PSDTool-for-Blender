@@ -2,7 +2,7 @@ import bpy
 from bpy.types import Operator
 from bpy.props import CollectionProperty, StringProperty, IntProperty, BoolProperty, PointerProperty
 
-from core import config
+from core import config, processing_psd, texture
 
 def _recur_make_image_from_psd_obj_prop(sublayer, combined_image, depth=0, layer_index=[0,0,0,0,0]):
     combined_image = combined_image
@@ -11,29 +11,23 @@ def _recur_make_image_from_psd_obj_prop(sublayer, combined_image, depth=0, layer
         if layer.visible:
             if layer.sublayer is None:
                 layer_image_name = config.make_name_for_psdtool(kindID=0, layer_index=layer_index)
-                combined_image.paste(layer_image, (layer.x, layer.y), layer_image)
+                layer_image = texture.get_packed_image_by_name(layer_image_name)
+                combined_image = processing_psd.merge_image(combined_image, layer_image, layer.x, layer.y)
             else:
-                combined_image = _recur_make_image_from_psd_obj_prop(layer.sublayer, combined_image)
+                combined_image = _recur_make_image_from_psd_obj_prop(layer.sublayer, combined_image, depth+1, layer_index)
+    layer_index[depth] = 0
     return combined_image
 
-def recur_paccking_imageobject(self, layer_images, layer_index, depth=0):#layer_index=[0,0,0,0,0]
-        for layer_image in layer_images:
-            layer_index[depth] += 1
-            if len(layer_image) == 1:
-                layer_image_obj = layer_image[0]
-                name = config.make_name_for_psdtool(kindID=0, layer_index=layer_index)
-                self.paccking_imageobject(layer_image_obj, name)
-            else:
-                self.recur_paccking_imageobject(layer_image, layer_index, depth+1)
-        layer_index[depth] = 0
-        return
-
 def make_image_from_psd_obj_prop():
-    active_obj = bpy.context.active_object
+    psd_obj_prop = bpy.context.active_object.sublayer
+    size = [psd_obj_prop.x, psd_obj_prop.y]
+    final_image = processing_psd.make_image(size)
+    final_image = _recur_make_image_from_psd_obj_prop(psd_obj_prop.sublayer, final_image)
+    return final_image
 
-    pass
-
-def change_tex_image(image_name):
+def update_tex(target_object):
+    new_image = make_image_from_psd_obj_prop()
+    new_tex_name = texture.paccking_merged_image_to_blender(new_image)
     pass
 
 class PSDTOOL_OT_toggle_visibility(Operator):
@@ -50,4 +44,6 @@ class PSDTOOL_OT_toggle_visibility(Operator):
             target_parent = target_parent.sublayer
             target = target.sublayer
         target[target_parent.active_layer_index].visible = not target[target_parent.active_layer_index].visible
+
+        update_tex(obj)
         return {'FINISHED'}

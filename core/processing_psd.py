@@ -73,6 +73,11 @@ def _recur_make_image_psd_data(layer, combined_image, layer_images):
                 combined_image = _recur_make_image_psd_data(sublayer, combined_image, layer_images[sublayer_index])
     return combined_image
 
+def make_image(size):
+    return Image.new('RGBA', size)
+
+def merge_image(base_image, merged_image, x, y):
+    return merged_image.paste(base_image, (x, y), base_image)
 
 
 if __name__ == "__main__":
