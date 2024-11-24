@@ -19,8 +19,8 @@ def _recur_make_image_from_psd_obj_prop(sublayer, combined_image, depth=0, layer
     return combined_image
 
 def make_image_from_psd_obj_prop():
-    psd_obj_prop = bpy.context.active_object.sublayer
-    size = [psd_obj_prop.x, psd_obj_prop.y]
+    psd_obj_prop = bpy.context.active_object.PSDTOOLKIT_psd_object_properties
+    size = [psd_obj_prop.size_x, psd_obj_prop.size_y]
     final_image = processing_psd.make_image(size)
     final_image = _recur_make_image_from_psd_obj_prop(psd_obj_prop.sublayer, final_image)
     return final_image
@@ -46,7 +46,8 @@ class PSDTOOL_OT_toggle_visibility(Operator):
     bl_idname = "psdtool.toggle_visibility"
     bl_label = "Toggle Visibility"
 
-    layer_index: IntProperty()  # 第何層目を操作されたか0~4
+    layer_index: IntProperty(name="layer_index", default=0)  # 第何層目を操作されたか0~4
+    item_index: IntProperty(name="item_index", default=0) #何番目のアイテムを操作されたか
 
     def execute(self, context):
         obj = context.active_object
@@ -55,7 +56,8 @@ class PSDTOOL_OT_toggle_visibility(Operator):
         for i in range(self.layer_index):
             target_parent = target_parent.sublayer
             target = target.sublayer
-        target[target_parent.active_layer_index].visible = not target[target_parent.active_layer_index].visible
+        target_parent.active_layer_index = self.item_index
+        target[self.item_index].visible = not target[self.item_index].visible
 
         update_tex(obj)
         return {'FINISHED'}

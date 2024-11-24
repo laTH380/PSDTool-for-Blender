@@ -5,7 +5,7 @@ from . import psd_obj
 
 classes = (
     io_import_psd_as_planes.PSDTOOLKIT_OT_import_psd,
-    # psd_obj.PSDTOOL_OT_toggle_visibility,
+    psd_obj.PSDTOOL_OT_toggle_visibility,
 )
 
 def import_psds_button(self, context):

@@ -10,9 +10,13 @@ class PSDTOOL_UL_display_toplayer_frames(UIList):
             row = layout.split(factor=0.8, align=True)
             row.label(text=item.name, translate=False)
             if item.visible:
-                row.label(text="", icon='HIDE_OFF')
+                op = row.operator("psdtool.toggle_visibility", text="", icon='HIDE_ON')
+                op.layer_index = 0
+                op.item_index = index
             else:
-                row.label(text="", icon='HIDE_ON')
+                op = row.operator("psdtool.toggle_visibility", text="", icon='HIDE_OFF')
+                op.layer_index = 0
+                op.item_index = index
         elif self.layout_type in {'COMPACT'}:
             pass
         elif self.layout_type in {'GRID'}:
@@ -25,9 +29,13 @@ class PSDTOOL_UL_display_sub1layer_frames(UIList):
             row = layout.split(factor=0.8, align=True)
             row.label(text=item.name, translate=False)
             if item.visible:
-                row.label(text="", icon='HIDE_OFF')
+                op = row.operator("psdtool.toggle_visibility", text="", icon='HIDE_ON')
+                op.layer_index = 1
+                op.item_index = index
             else:
-                row.label(text="", icon='HIDE_ON')
+                op = row.operator("psdtool.toggle_visibility", text="", icon='HIDE_OFF')
+                op.layer_index = 1
+                op.item_index = index
         elif self.layout_type in {'COMPACT'}:
             pass
         elif self.layout_type in {'GRID'}:
@@ -60,7 +68,6 @@ class PSDTOOL_PT_main_panel(Panel):
 
     def draw(self, context):#描画内容
         #情報取得
-        scene = context.scene
         active_object = context.active_object
         is_active_object_psd = False
         if len(active_object.PSDTOOLKIT_psd_object_properties.sublayer)>=1:
@@ -98,7 +105,6 @@ class PSDTOOL_PT_main_panel(Panel):
                 psd_info, "sublayer",#リストのデータソースで、
                 psd_info, "active_layer_index",#アクティブなアイテムのインデクス。
             )
-
             sub1_layer = psd_info.sublayer[psd_info.active_layer_index]
             if len(sub1_layer.sublayer)>=1:
                 group_layer_table_item = group_layer_table.row()

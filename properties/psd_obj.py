@@ -74,6 +74,8 @@ class PSDTOOLKIT_psd_object_properties_top_layer(PropertyGroup):
     active_layer_index: IntProperty(name="active_layer_index", default=0)
 
 class PSDTOOLKIT_psd_object_properties(PropertyGroup):
+    size_x: IntProperty(name="size_x", default=0)
+    size_y: IntProperty(name="size_y", default=0)
     sublayer: CollectionProperty(type=PSDTOOLKIT_psd_object_properties_top_layer)
     active_layer_index: IntProperty(name="active_layer_index", default=0)
 
@@ -82,13 +84,15 @@ class PSDTOOLKIT_OT_make_object_properties(Operator):#指定されたオブジ�
     bl_label = "psdtoolkit.make_psd_object_properties"
 
     object_name: StringProperty(name="object_name", default="object_name")
-    psd_size_x: IntProperty(name="psd_size", default=0)
-    psd_size_y: IntProperty(name="psd_size", default=0)
+    psd_size_x: IntProperty(name="psd_size_x", default=0)
+    psd_size_y: IntProperty(name="psd_size_y", default=0)
     layer_struct: StringProperty(name="psd_struct", default="")#json文字列でpsdの構造情報が入力される
 
     def execute(self, context):
         target_object = context.scene.objects.get(self.object_name)
         if target_object is not None:
+            target_object.PSDTOOLKIT_psd_object_properties.size_x = self.psd_size_x
+            target_object.PSDTOOLKIT_psd_object_properties.size_y = self.psd_size_y
             layer_struct = utils.jsonstring2dict(self.layer_struct)
             for top_layer_struct in layer_struct:
                 self._recur_make_props(target_object.PSDTOOLKIT_psd_object_properties.sublayer, top_layer_struct)
