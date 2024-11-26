@@ -21,7 +21,7 @@ def _first_process_psd(psd):
     layer_images = []#psdと同じ構造でレイヤーごとの画像データが入っている
     psd_info = {"size":psd.size}
     for index, layer in enumerate(psd):
-        layer_struct_item, _ = _recur_make_psd_struct(layer, layer_images)
+        layer_struct_item = _recur_make_psd_struct(layer, layer_images)
         layer_struct.append(layer_struct_item)
     utils.save_json_file(layer_struct, "./layer_struct.json")
     return psd_info, layer_images, layer_struct, max_depth
@@ -35,14 +35,16 @@ def _recur_make_psd_struct(layer, layer_images, depth=0):
         sublayer_struct = []
         layer_images.append([])
         for sublayer in layer:
-            subsublayer_struct,depth = _recur_make_psd_struct(sublayer, layer_images[-1], depth+1)
+            subsublayer_struct = _recur_make_psd_struct(sublayer, layer_images[-1], depth+1)
             sublayer_struct.append(subsublayer_struct)
         layer_struct = _psd_layer_to_dict(layer.left, layer.top, layer.visible, layer.name, sublayer_struct)
-        return layer_struct, depth-1
+        return layer_struct
     else:
         layer_struct = _psd_layer_to_dict(layer.left, layer.top, layer.visible, layer.name)
+        if not layer.visible:
+            layer.visible = True
         layer_images.append([layer.composite()])
-        return layer_struct, depth-1
+        return layer_struct
 
 def _psd_layer_to_dict(x, y, visible, name, sublayer=None):
     result = {}

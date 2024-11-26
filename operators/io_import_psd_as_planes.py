@@ -1048,6 +1048,7 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
             layer_index[depth] += 1
             if len(layer_image) == 1:
                 layer_image_obj = layer_image[0]
+                layer_image_obj.show()
                 name = config.make_name_for_psdtool(kindID=0, layer_index=layer_index)
                 texture.paccking_image_to_blender(layer_image_obj, name)
             else:

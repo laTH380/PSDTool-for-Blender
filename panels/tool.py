@@ -10,11 +10,11 @@ class PSDTOOL_UL_display_toplayer_frames(UIList):
             row = layout.split(factor=0.8, align=True)
             row.label(text=item.name, translate=False)
             if item.visible:
-                op = row.operator("psdtool.toggle_visibility", text="", icon='HIDE_ON')
+                op = row.operator("psdtool.toggle_visibility", text="", icon='HIDE_OFF')
                 op.layer_index = 0
                 op.item_index = index
             else:
-                op = row.operator("psdtool.toggle_visibility", text="", icon='HIDE_OFF')
+                op = row.operator("psdtool.toggle_visibility", text="", icon='HIDE_ON')
                 op.layer_index = 0
                 op.item_index = index
         elif self.layout_type in {'COMPACT'}:
@@ -29,11 +29,11 @@ class PSDTOOL_UL_display_sub1layer_frames(UIList):
             row = layout.split(factor=0.8, align=True)
             row.label(text=item.name, translate=False)
             if item.visible:
-                op = row.operator("psdtool.toggle_visibility", text="", icon='HIDE_ON')
+                op = row.operator("psdtool.toggle_visibility", text="", icon='HIDE_OFF')
                 op.layer_index = 1
                 op.item_index = index
             else:
-                op = row.operator("psdtool.toggle_visibility", text="", icon='HIDE_OFF')
+                op = row.operator("psdtool.toggle_visibility", text="", icon='HIDE_ON')
                 op.layer_index = 1
                 op.item_index = index
         elif self.layout_type in {'COMPACT'}:
