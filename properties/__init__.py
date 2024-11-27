@@ -7,6 +7,7 @@ from . import psd_obj
 classes = (
     psd_obj.PSDTOOLKIT_scene_properties_psdlist_item,
     psd_obj.PSDTOOLKIT_scene_properties,
+    psd_obj.PSDTOOLKIT_psd_object_properties_sub5_layer,
     psd_obj.PSDTOOLKIT_psd_object_properties_sub4_layer,
     psd_obj.PSDTOOLKIT_psd_object_properties_sub3_layer,
     psd_obj.PSDTOOLKIT_psd_object_properties_sub2_layer,

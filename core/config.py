@@ -5,7 +5,7 @@ def make_name_for_psdtool(kindID: int=0, frame: int=0, layer_index: List[int]=[0
     objectID = 0
     ID1 = 0
     ID2 = 0
-    name = "PSDToolKit_"
+    name = "PSDToolKit"
     if kindID == 0:#レイヤー画像用ネーミング
         layer_name = ""
         for layer_length in layer_index:

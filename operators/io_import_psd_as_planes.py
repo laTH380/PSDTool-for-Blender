@@ -958,8 +958,7 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
         for index, psd in enumerate(psds):
             #psd_process
             psd_info, first_image, layer_images, layer_struct, max_depth = processing_psd.make_psd_data_from_psd(psd.image.filepath)
-            if max_depth > 5:
-                self.report({'ERROR'}, f"レイヤーの深さが5以上です。")
+            if max_depth >= 5:
                 continue
             objectid = len(context.scene.PSDTOOLKIT_scene_properties.psd_list)
             object_data_name = config.make_name_for_psdtool(2,objectid)
@@ -970,6 +969,10 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
             first_tex_name = config.make_name_for_psdtool(1, objectid, context.scene.frame_current)
             bpyImage.paccking_image_to_blender(first_image, first_tex_name)
             ImageSpec_psds.append(ImageSpec(bpy.data.images.get(first_tex_name), psd.size, psd.frame_start, psd.frame_offset, psd.frame_duration))
+        
+        if len(processed_psds) == 0:
+            self.report({'ERROR'}, f"レイヤーグループの深さが5以上のpsdファイルは読み込めません")
+            return
 
         #レイヤー画像データのパック
         for index, processed_psd in enumerate(processed_psds):

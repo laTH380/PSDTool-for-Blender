@@ -35,7 +35,11 @@ class PSDTOOLKIT_OT_add_scene_properties_psd_list(Operator):#カスタムプロ�
     
 # psdオブジェクトプロパティ
 # 再帰的定義ができないので多層化はこれを増やしていかないといけない（5階層までサポート）
+class PSDTOOLKIT_psd_object_properties_sub5_layer(PropertyGroup):
+    name: StringProperty(name="増やす場合はこれを変えていく", default="")
+
 class PSDTOOLKIT_psd_object_properties_sub4_layer(PropertyGroup):
+    sublayer: CollectionProperty(type=PSDTOOLKIT_psd_object_properties_sub5_layer)#将来的に増やせるように
     x: IntProperty(name="x", default=0)
     y: IntProperty(name="y", default=0)
     visible: BoolProperty(name="visible", default=True)
