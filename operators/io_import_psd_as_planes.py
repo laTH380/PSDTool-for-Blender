@@ -26,7 +26,7 @@ from itertools import count, repeat
 from collections import namedtuple
 from math import pi
 
-from core import config, processing_psd, texture
+from core import bpyImage, config, processing_psd
 import utils
 
 import bpy
@@ -968,7 +968,7 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
             # bpy.ops.psdtoolkit.add_scene_properties_psd_list(objectname = object_data_name)
             #初期画像のパック
             first_tex_name = config.make_name_for_psdtool(1, objectid, context.scene.frame_current)
-            texture.paccking_image_to_blender(first_image, first_tex_name)
+            bpyImage.paccking_image_to_blender(first_image, first_tex_name)
             ImageSpec_psds.append(ImageSpec(bpy.data.images.get(first_tex_name), psd.size, psd.frame_start, psd.frame_offset, psd.frame_duration))
 
         #レイヤー画像データのパック
@@ -1048,9 +1048,8 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
             layer_index[depth] += 1
             if len(layer_image) == 1:
                 layer_image_obj = layer_image[0]
-                layer_image_obj.show()
                 name = config.make_name_for_psdtool(kindID=0, layer_index=layer_index)
-                texture.paccking_image_to_blender(layer_image_obj, name)
+                bpyImage.paccking_image_to_blender(layer_image_obj, name)
             else:
                 self.recur_paccking_imageobject(layer_image, layer_index, depth+1)
         layer_index[depth] = 0

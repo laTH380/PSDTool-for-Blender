@@ -61,7 +61,7 @@ def _make_image_from_psd_data(psd_info, layer_struct, layer_images):
     combined_image = Image.new('RGBA', psd_info["size"])
     for layer_index, layer in enumerate(layer_struct):
         _recur_make_image_psd_data(layer, combined_image, layer_images[layer_index])
-    combined_image.show()
+    # combined_image.show()
     return combined_image
 
 def _recur_make_image_psd_data(layer, combined_image, layer_images):
@@ -74,13 +74,6 @@ def _recur_make_image_psd_data(layer, combined_image, layer_images):
             for sublayer_index, sublayer in enumerate(layer["sublayer"]):
                 combined_image = _recur_make_image_psd_data(sublayer, combined_image, layer_images[sublayer_index])
     return combined_image
-
-def make_image(size):
-    return Image.new('RGBA', size)
-
-def merge_image(base_image, merged_image, x, y):
-    return merged_image.paste(base_image, (x, y), base_image)
-
 
 if __name__ == "__main__":
     make_psd_data_from_psd("./test/小春六花ver1.1_めじろーす_im11070159.psd")
