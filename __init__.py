@@ -70,14 +70,14 @@ translations = {
 
 classes = (
     #property
-    # control_property.PSDTOOLKIT_scene_properties_psdlist_item,
-    # control_property.PSDTOOLKIT_scene_properties,
-    # control_property.PSDTOOLKIT_psd_object_properties_sub4_layer,
-    # control_property.PSDTOOLKIT_psd_object_properties_sub3_layer,
-    # control_property.PSDTOOLKIT_psd_object_properties_sub2_layer,
-    # control_property.PSDTOOLKIT_psd_object_properties_sub1_layer,
-    # control_property.PSDTOOLKIT_psd_object_properties_top_layer,
-    # control_property.PSDTOOLKIT_psd_object_properties,
+    # control_property.PSDTOOL_scene_properties_psdlist_item,
+    # control_property.PSDTOOL_scene_properties,
+    # control_property.PSDTOOL_psd_object_properties_sub4_layer,
+    # control_property.PSDTOOL_psd_object_properties_sub3_layer,
+    # control_property.PSDTOOL_psd_object_properties_sub2_layer,
+    # control_property.PSDTOOL_psd_object_properties_sub1_layer,
+    # control_property.PSDTOOL_psd_object_properties_top_layer,
+    # control_property.PSDTOOL_psd_object_properties,
     #ui
     # ui_panel.PSDTOOL_PT_main_panel,
     # ui_panel.MMDDisplayItemsPanel,
@@ -85,14 +85,14 @@ classes = (
     # ui_panel.PSDTOOL_UL_display_sub1layer_frames,
     # ui_panel.PSDTOOL_PT_Panel,
     #operator
-    # control_property.PSDTOOLKIT_OT_add_scene_properties_psd_list,
-    # control_property.PSDTOOLKIT_OT_make_object_properties,
-    # control_property.PSDTOOLKIT_OT_set_object_properties,
-    # io_import_psd_as_planes.PSDTOOLKIT_OT_import_psd
+    # control_property.PSDTOOL_OT_add_scene_properties_psd_list,
+    # control_property.PSDTOOL_OT_make_object_properties,
+    # control_property.PSDTOOL_OT_set_object_properties,
+    # io_import_psd_as_planes.PSDTOOL_OT_import_psd
 )
 
 # def import_psds_button(self, context):#メニューに追加するボタンを作る関数
-#     self.layout.operator(io_import_psd_as_planes.PSDTOOLKIT_OT_import_psd.bl_idname, text="Import Psd as Planes", icon='TEXTURE')
+#     self.layout.operator(io_import_psd_as_planes.PSDTOOL_OT_import_psd.bl_idname, text="Import Psd as Planes", icon='TEXTURE')
 
 def register():
     for module in modules:
@@ -100,8 +100,8 @@ def register():
     for c in classes:
         bpy.utils.register_class(c)
     bpy.app.translations.register(__name__, translations)
-    # bpy.types.Scene.PSDTOOLKIT_scene_properties = PointerProperty(type=control_property.PSDTOOLKIT_scene_properties)
-    # bpy.types.Object.PSDTOOLKIT_psd_object_properties = PointerProperty(type=control_property.PSDTOOLKIT_psd_object_properties)
+    # bpy.types.Scene.PSDTOOL_scene_properties = PointerProperty(type=control_property.PSDTOOL_scene_properties)
+    # bpy.types.Object.PSDTOOL_psd_object_properties = PointerProperty(type=control_property.PSDTOOL_psd_object_properties)
     # bpy.types.TOPBAR_MT_file_import.append(import_psds_button)
     # bpy.types.VIEW3D_MT_image_add.append(import_psds_button)
     # bpy.utils.register_class(ui_panel.PSDTOOL_PT_main_panel)
@@ -112,8 +112,8 @@ def unregister():
     # bpy.types.TOPBAR_MT_file_import.remove(import_psds_button)
     # bpy.types.VIEW3D_MT_image_add.remove(import_psds_button)
     # bpy.utils.unregister_class(ui_panel.PSDTOOL_PT_main_panel)
-    # del bpy.types.Scene.PSDTOOLKIT_scene_properties
-    # del bpy.types.Object.PSDTOOLKIT_psd_object_properties
+    # del bpy.types.Scene.PSDTOOL_scene_properties
+    # del bpy.types.Object.PSDTOOL_psd_object_properties
     bpy.app.translations.unregister(__name__)
     for c in classes:
         bpy.utils.unregister_class(c)

@@ -13,7 +13,7 @@ def make_psd_data_from_psd(psd_path):
     psd = PSDImage.open(psd_path)
     psd_info, layer_images, layer_struct, max_depth = _first_process_psd(psd)
     first_image = _make_image_from_psd_data(psd_info, layer_struct, layer_images)
-    psd_info["name"] = os.path.basename(psd_path)
+    psd_info["obj_name"] = os.path.basename(psd_path)
     return psd_info, first_image, layer_images, layer_struct, max_depth #psd_info = {name, size}
 
 def _first_process_psd(psd):

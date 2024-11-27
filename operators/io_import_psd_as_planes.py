@@ -594,10 +594,10 @@ def setup_compositing(context, plane, img_spec):
 # -----------------------------------------------------------------------------
 # Operator
 
-class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
+class PSDTOOL_OT_import_psd(Operator, AddObjectHelper):
     """Create mesh plane(s) from image files with the appropriate aspect ratio"""
 
-    bl_idname = "psdtoolkit.import_psd"
+    bl_idname = "psdtool.import_psd"
     bl_label = "Import Psd"
     bl_options = {'REGISTER', 'PRESET', 'UNDO'}
 
@@ -953,20 +953,21 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
                 print("psd以外は除去されました")#エラーメッセージとして表示
 
         #オブジェクトIDの管理,psdを処理してカスタムプロパティとして保持するデータとレイヤーごとの画像を用意,最初のテクスチャ画像の設定
-        processed_psds = []#[[id,psd_info{name,size},[layer_struct],[layer_images]],...,]
+        processed_psds = []#[{psd_info{id,obj_name,mesh_name,size},[layer_struct],[layer_images]},...,]
         ImageSpec_psds = []
         for index, psd in enumerate(psds):
             #psd_process
             psd_info, first_image, layer_images, layer_struct, max_depth = processing_psd.make_psd_data_from_psd(psd.image.filepath)
             if max_depth >= 5:
                 continue
-            objectid = len(context.scene.PSDTOOLKIT_scene_properties.psd_list)
-            object_data_name = config.make_name_for_psdtool(2,objectid)
-            processed_psds.append([objectid, psd_info, layer_struct, layer_images])
-            #オブジェクトリスト管理
-            # bpy.ops.psdtoolkit.add_scene_properties_psd_list(objectname = object_data_name)
+            objectid = context.scene.PSDTOOL_scene_properties.psd_id
+            context.scene.PSDTOOL_scene_properties.psd_id += 1
+            mesh_name = config.make_name_for_psdtool(kindID=2, objectID=objectid, frame=context.scene.frame_current)
+            psd_info["id"] = objectid
+            psd_info["mesh_name"] = mesh_name
+            processed_psds.append({"psd_info": psd_info, "layer_struct": layer_struct, "layer_images": layer_images})
             #初期画像のパック
-            first_tex_name = config.make_name_for_psdtool(1, objectid, context.scene.frame_current)
+            first_tex_name = config.make_name_for_psdtool(kindID=1, objectID=objectid, frame=context.scene.frame_current)
             bpyImage.paccking_image_to_blender(first_image, first_tex_name)
             ImageSpec_psds.append(ImageSpec(bpy.data.images.get(first_tex_name), psd.size, psd.frame_start, psd.frame_offset, psd.frame_duration))
         
@@ -976,13 +977,13 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
 
         #レイヤー画像データのパック
         for index, processed_psd in enumerate(processed_psds):
-            self.recur_paccking_imageobject(processed_psd[3], [0,0,0,0,0])
+            self.recur_paccking_imageobject(processed_psd["psd_info"]["id"], processed_psd["layer_images"], [0,0,0,0,0])
 
         # Create individual planes + カスタムプロパティをつける
         planes = []
         for index, img_spec in enumerate(ImageSpec_psds):
-            plane = self.single_image_spec_to_plane(context, img_spec, processed_psds[index][1]["name"])
-            self.add_object_property(processed_psds[index][1], processed_psds[index][2])
+            plane = self.single_image_spec_to_plane(context, img_spec, processed_psds[index]["psd_info"]["obj_name"], processed_psds[index]["psd_info"]["mesh_name"])
+            self.add_object_property(processed_psds[index]["psd_info"]["id"], processed_psds[index]["psd_info"], processed_psds[index]["layer_struct"])
             planes.append(plane)
 
         context.view_layer.update()
@@ -1008,17 +1009,18 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
 
 
     #　プレーンにpsd情報のカスタムプロパティを設定
-    def add_object_property(self, psd_info, layer_struct):
+    def add_object_property(self, psd_id, psd_info, layer_struct):
         layer_struct_string = utils.dict2jsonstring(layer_struct)
-        bpy.ops.psdtoolkit.make_psd_object_properties(
+        bpy.ops.psdtool.make_psd_object_properties(
             layer_struct=layer_struct_string, 
-            object_name=psd_info["name"], 
+            object_name=psd_info["obj_name"], 
             psd_size_x=psd_info["size"][0],
-            psd_size_y=psd_info["size"][1]
+            psd_size_y=psd_info["size"][1],
+            psd_id=psd_id
         )
         # for group_layer_index, group_layer in enumerate(psd_info):
         #     if group_layer["sublayer"] is None:#グループレイヤーでない最上位レイヤー
-        #         bpy.ops.psdtoolkit.set_psd_object_properties(
+        #         bpy.ops.psdtool.set_psd_object_properties(
         #             object_data_name=object_data_name, 
         #             sub_layer=False,
         #             x=group_layer["x"],
@@ -1027,7 +1029,7 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
         #             layer_name=group_layer["name"]
         #         )
         #     else:
-        #         bpy.ops.psdtoolkit.set_psd_object_properties(
+        #         bpy.ops.psdtool.set_psd_object_properties(
         #             object_data_name=object_data_name, 
         #             sub_layer=False,
         #             x=group_layer["x"],
@@ -1036,7 +1038,7 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
         #             layer_name=group_layer["name"]
         #         )
         #         for sub_layer_index, sub_layer in enumerate(group_layer["sublayer"]):
-        #             bpy.ops.psdtoolkit.set_psd_object_properties(
+        #             bpy.ops.psdtool.set_psd_object_properties(
         #                 object_data_name=object_data_name, 
         #                 sub_layer=True,
         #                 x=sub_layer["x"],
@@ -1046,20 +1048,20 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
         #             )
     
     # 再帰的に画像パック関数を呼び出しlayer_imagesのレイヤーごとの画像を保存
-    def recur_paccking_imageobject(self, layer_images, layer_index, depth=0):#layer_index=[0,0,0,0,0]
+    def recur_paccking_imageobject(self, psd_id, layer_images, layer_index, depth=0):#layer_index=[0,0,0,0,0]
         for layer_image in layer_images:
             layer_index[depth] += 1
             if len(layer_image) == 1:
                 layer_image_obj = layer_image[0]
-                name = config.make_name_for_psdtool(kindID=0, layer_index=layer_index)
+                name = config.make_name_for_psdtool(kindID=0, objectID=psd_id, layer_index=layer_index)
                 bpyImage.paccking_image_to_blender(layer_image_obj, name)
             else:
-                self.recur_paccking_imageobject(layer_image, layer_index, depth+1)
+                self.recur_paccking_imageobject(psd_id, layer_image, layer_index, depth+1)
         layer_index[depth] = 0
         return
         
     # operate on a single image
-    def single_image_spec_to_plane(self, context, img_spec, object_name, object_data_name=""):
+    def single_image_spec_to_plane(self, context, img_spec, object_name, mesh_name):
 
         # Configure image
         self.apply_image_options(img_spec.image)
@@ -1070,7 +1072,7 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
             material = self.create_cycles_material(context, img_spec)
 
         # Create and position plane object
-        plane = self.create_image_plane(context, material.name, img_spec, object_name)
+        plane = self.create_image_plane(context, material.name, img_spec, object_name, mesh_name)
 
         # Assign Material
         plane.data.materials.append(material)
@@ -1194,7 +1196,7 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
 
     # -------------------------------------------------------------------------
     # Geometry Creation
-    def create_image_plane(self, context, material_name, img_spec, object_name, object_data_name=""):
+    def create_image_plane(self, context, material_name, img_spec, object_name, mesh_name=""):
 
         width, height = self.compute_plane_size(context, img_spec)
 
@@ -1205,7 +1207,7 @@ class PSDTOOLKIT_OT_import_psd(Operator, AddObjectHelper):
         if plane.mode != 'OBJECT':
             bpy.ops.object.mode_set(mode='OBJECT')
         plane.dimensions = width, height, 0.0
-        # plane.data.name = object_data_name
+        plane.data.name = mesh_name
         plane.name = object_name
         bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
 

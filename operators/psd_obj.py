@@ -21,7 +21,7 @@ def _recur_make_image_from_psd_obj_prop(sublayer, combined_image, depth=0, layer
     return tmp_combined_image
 
 def make_image_from_psd_obj_prop():
-    psd_obj_prop = bpy.context.active_object.PSDTOOLKIT_psd_object_properties
+    psd_obj_prop = bpy.context.active_object.PSDTOOL_psd_object_properties
     size = [psd_obj_prop.size_x, psd_obj_prop.size_y]
     final_image = bpyImage.make_image(size)
     final_image = _recur_make_image_from_psd_obj_prop(psd_obj_prop.sublayer, final_image)
@@ -53,7 +53,7 @@ class PSDTOOL_OT_toggle_visibility(Operator):
 
     def execute(self, context):
         target_obj = context.active_object
-        target_parent = target_obj.PSDTOOLKIT_psd_object_properties
+        target_parent = target_obj.PSDTOOL_psd_object_properties
         target = target_parent
         for i in range(5):
             if i == self.layer_index:

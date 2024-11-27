@@ -4,13 +4,13 @@ from . import io_import_psd_as_planes
 from . import psd_obj
 
 classes = (
-    io_import_psd_as_planes.PSDTOOLKIT_OT_import_psd,
+    io_import_psd_as_planes.PSDTOOL_OT_import_psd,
     psd_obj.PSDTOOL_OT_toggle_visibility,
 )
 
 def import_psds_button(self, context):
     self.layout.operator(
-        io_import_psd_as_planes.PSDTOOLKIT_OT_import_psd.bl_idname, 
+        io_import_psd_as_planes.PSDTOOL_OT_import_psd.bl_idname, 
         text="Import Psd as Planes", 
         icon='TEXTURE'
     )

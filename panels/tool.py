@@ -109,11 +109,11 @@ class PSDTOOL_PT_top_panel(Panel):#領域定義
         layout = self.layout.column()
         # コントロールパネル
         row = layout.row()
-        row.operator('psdtoolkit.import_psd', text='import PSD', icon='OUTLINER_OB_MESH')
+        row.operator('psdtool.import_psd', text='import PSD', icon='OUTLINER_OB_MESH')
 
 class PSDTOOL_PT_layers_panel(Panel):
     bl_label = "PSD layers"
-    bl_idname = "PSDTOOLKIT_PT_layers_panel"
+    bl_idname = "PSDTOOL_PT_layers_panel"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_category = 'PSDTool'
@@ -122,7 +122,7 @@ class PSDTOOL_PT_layers_panel(Panel):
         #情報取得
         active_object = context.active_object
         is_active_object_psd = False
-        if len(active_object.PSDTOOLKIT_psd_object_properties.sublayer)>=1:
+        if len(active_object.PSDTOOL_psd_object_properties.sublayer)>=1:
             is_active_object_psd = True
         else:
             print("no psd object properties")
@@ -136,7 +136,7 @@ class PSDTOOL_PT_layers_panel(Panel):
         # row.label(text="ここにレイヤー画像を表示")
         
         group_layer_table = col.column()
-        psd_info = active_object.PSDTOOLKIT_psd_object_properties
+        psd_info = active_object.PSDTOOL_psd_object_properties
         group_layer_table_item = group_layer_table.row()
         group_layer_table_item.template_list(#その中にリストUIを作成
             "PSDTOOL_UL_display_toplayer_frames",  # リストタイプの名前を文字列として渡す

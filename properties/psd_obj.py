@@ -13,93 +13,79 @@ import utils
 # ===========================================
 
 # シーンプロパティ
-class PSDTOOLKIT_scene_properties_psdlist_item(PropertyGroup):
-    objectname: StringProperty(name="objectname", default="objectname")
-    active_group_layer_index: IntProperty(name="active_group_layer_index", default=0)
-    active_sublayer_index: IntProperty(name="active_sublayer_index", default=0)
-
-class PSDTOOLKIT_scene_properties(PropertyGroup):
-    psd_list: CollectionProperty(type=PSDTOOLKIT_scene_properties_psdlist_item)
-
-class PSDTOOLKIT_OT_add_scene_properties_psd_list(Operator):#カスタムプロパティはこのようにアクセッサを作っておいてアクセスする
-    bl_idname = "psdtoolkit.add_scene_properties_psd_list"
-    bl_label = "Add psd object"
-
-    objectname: StringProperty(name="objectname", default="objectname")#プロパティのセットはこのようにオペレータのプロパティを介す
-
-    def execute(self, context):
-        scene = context.scene
-        item = scene.PSDTOOLKIT_scene_properties.psd_list.add()
-        item.objectname = self.objectname
-        return {'FINISHED'}
+class PSDTOOL_scene_properties(PropertyGroup):
+    psd_id: IntProperty(name="psd_id", default=0)
     
 # psdオブジェクトプロパティ
 # 再帰的定義ができないので多層化はこれを増やしていかないといけない（5階層までサポート）
-class PSDTOOLKIT_psd_object_properties_sub5_layer(PropertyGroup):
+class PSDTOOL_psd_object_properties_sub5_layer(PropertyGroup):
     name: StringProperty(name="増やす場合はこれを変えていく", default="")
 
-class PSDTOOLKIT_psd_object_properties_sub4_layer(PropertyGroup):
-    sublayer: CollectionProperty(type=PSDTOOLKIT_psd_object_properties_sub5_layer)#将来的に増やせるように
+class PSDTOOL_psd_object_properties_sub4_layer(PropertyGroup):
+    sublayer: CollectionProperty(type=PSDTOOL_psd_object_properties_sub5_layer)#将来的に増やせるように
     x: IntProperty(name="x", default=0)
     y: IntProperty(name="y", default=0)
     visible: BoolProperty(name="visible", default=True)
     name: StringProperty(name="name", default="")
 
-class PSDTOOLKIT_psd_object_properties_sub3_layer(PropertyGroup):
-    sublayer: CollectionProperty(type=PSDTOOLKIT_psd_object_properties_sub4_layer)
-    x: IntProperty(name="x", default=0)
-    y: IntProperty(name="y", default=0)
-    visible: BoolProperty(name="visible", default=True)
-    name: StringProperty(name="name", default="")
-    active_layer_index: IntProperty(name="active_layer_index", default=0)
-
-class PSDTOOLKIT_psd_object_properties_sub2_layer(PropertyGroup):
-    sublayer: CollectionProperty(type=PSDTOOLKIT_psd_object_properties_sub3_layer)
+class PSDTOOL_psd_object_properties_sub3_layer(PropertyGroup):
+    sublayer: CollectionProperty(type=PSDTOOL_psd_object_properties_sub4_layer)
     x: IntProperty(name="x", default=0)
     y: IntProperty(name="y", default=0)
     visible: BoolProperty(name="visible", default=True)
     name: StringProperty(name="name", default="")
     active_layer_index: IntProperty(name="active_layer_index", default=0)
 
-class PSDTOOLKIT_psd_object_properties_sub1_layer(PropertyGroup):
-    sublayer: CollectionProperty(type=PSDTOOLKIT_psd_object_properties_sub2_layer)
+class PSDTOOL_psd_object_properties_sub2_layer(PropertyGroup):
+    sublayer: CollectionProperty(type=PSDTOOL_psd_object_properties_sub3_layer)
     x: IntProperty(name="x", default=0)
     y: IntProperty(name="y", default=0)
     visible: BoolProperty(name="visible", default=True)
     name: StringProperty(name="name", default="")
     active_layer_index: IntProperty(name="active_layer_index", default=0)
 
-class PSDTOOLKIT_psd_object_properties_top_layer(PropertyGroup):
-    sublayer: CollectionProperty(type=PSDTOOLKIT_psd_object_properties_sub1_layer)
+class PSDTOOL_psd_object_properties_sub1_layer(PropertyGroup):
+    sublayer: CollectionProperty(type=PSDTOOL_psd_object_properties_sub2_layer)
     x: IntProperty(name="x", default=0)
     y: IntProperty(name="y", default=0)
     visible: BoolProperty(name="visible", default=True)
     name: StringProperty(name="name", default="")
     active_layer_index: IntProperty(name="active_layer_index", default=0)
 
-class PSDTOOLKIT_psd_object_properties(PropertyGroup):
+class PSDTOOL_psd_object_properties_top_layer(PropertyGroup):
+    sublayer: CollectionProperty(type=PSDTOOL_psd_object_properties_sub1_layer)
+    x: IntProperty(name="x", default=0)
+    y: IntProperty(name="y", default=0)
+    visible: BoolProperty(name="visible", default=True)
+    name: StringProperty(name="name", default="")
+    active_layer_index: IntProperty(name="active_layer_index", default=0)
+
+class PSDTOOL_psd_object_properties(PropertyGroup):
+    psd_id: IntProperty(name="psd_id", default=0)
     size_x: IntProperty(name="size_x", default=0)
     size_y: IntProperty(name="size_y", default=0)
-    sublayer: CollectionProperty(type=PSDTOOLKIT_psd_object_properties_top_layer)
+    sublayer: CollectionProperty(type=PSDTOOL_psd_object_properties_top_layer)
     active_layer_index: IntProperty(name="active_layer_index", default=0)
 
-class PSDTOOLKIT_OT_make_object_properties(Operator):#指定されたオブジェクトのPSDTOOLKIT_psd_object_propertiesを作成
-    bl_idname = "psdtoolkit.make_psd_object_properties"
-    bl_label = "psdtoolkit.make_psd_object_properties"
+class PSDTOOL_OT_make_object_properties(Operator):#指定されたオブジェクトのPSDTOOL_psd_object_propertiesを作成
+    bl_idname = "psdtool.make_psd_object_properties"
+    bl_label = "psdtool.make_psd_object_properties"
 
     object_name: StringProperty(name="object_name", default="object_name")
     psd_size_x: IntProperty(name="psd_size_x", default=0)
     psd_size_y: IntProperty(name="psd_size_y", default=0)
+    psd_id: IntProperty(name="psd_id", default=0)#PSDTool上におけるpsdのID
     layer_struct: StringProperty(name="psd_struct", default="")#json文字列でpsdの構造情報が入力される
 
     def execute(self, context):
         target_object = context.scene.objects.get(self.object_name)
         if target_object is not None:
-            target_object.PSDTOOLKIT_psd_object_properties.size_x = self.psd_size_x
-            target_object.PSDTOOLKIT_psd_object_properties.size_y = self.psd_size_y
+            target_object.PSDTOOL_psd_object_properties.psd_id = self.psd_id
+            target_object.PSDTOOL_psd_object_properties.size_x = self.psd_size_x
+            target_object.PSDTOOL_psd_object_properties.size_y = self.psd_size_y
             layer_struct = utils.jsonstring2dict(self.layer_struct)
             for top_layer_struct in layer_struct:
-                self._recur_make_props(target_object.PSDTOOLKIT_psd_object_properties.sublayer, top_layer_struct)
+                self._recur_make_props(target_object.PSDTOOL_psd_object_properties.sublayer, top_layer_struct)
         else:
             self.report({ 'ERROR' }, "The psd plane can't be found")
             return { 'CANCELLED' }
@@ -116,39 +102,39 @@ class PSDTOOLKIT_OT_make_object_properties(Operator):#指定されたオブジ�
                 self._recur_make_props(new_target_prop.sublayer, child_layer_struct)
         return
 
-class PSDTOOLKIT_OT_set_object_properties(Operator):#指定されたオブジェクトのPSDTOOLKIT_psd_object_propertiesに要素を上書き更新。
-    bl_idname = "psdtoolkit.set_psd_object_properties"
-    bl_label = "psdtoolkit.set_psd_object_properties"
+# class PSDTOOL_OT_set_object_properties(Operator):#OLD:指定されたオブジェクトのPSDTOOL_psd_object_propertiesに要素を上書き更新。
+#     bl_idname = "psdtool.set_psd_object_properties"
+#     bl_label = "psdtool.set_psd_object_properties"
 
-    object_data_name: StringProperty(name="object_data_name", default="object_data_name")
-    sub_layer: BoolProperty(name="sublayer", default=False)#これがsublayerかどうか
-    group_layer_index: IntProperty(name="group_layer_index", default=0)#親レイヤーのインデックス
-    sublayer_index: IntProperty(name="sublayer_index", default=0)#子レイヤーのインデックス
+#     object_data_name: StringProperty(name="object_data_name", default="object_data_name")
+#     sub_layer: BoolProperty(name="sublayer", default=False)#これがsublayerかどうか
+#     group_layer_index: IntProperty(name="group_layer_index", default=0)#親レイヤーのインデックス
+#     sublayer_index: IntProperty(name="sublayer_index", default=0)#子レイヤーのインデックス
 
-    x: IntProperty(name="x", default=0)
-    y: IntProperty(name="y", default=0)
-    visible: BoolProperty(name="visible", default=True)
-    layer_name: StringProperty(name="name", default="")
+#     x: IntProperty(name="x", default=0)
+#     y: IntProperty(name="y", default=0)
+#     visible: BoolProperty(name="visible", default=True)
+#     layer_name: StringProperty(name="name", default="")
 
-    def execute(self, context):
-        target_object = context.scene.objects.get(self.object_data_name)
-        if target_object is not None:
-            if self.sublayer:
-                item = target_object.PSDTOOLKIT_psd_object_properties.psdtoolkit_layer_info[self.group_layer_index].sublayer[self.sublayer_index]
-                item.x = self.x
-                item.y = self.y
-                item.visible = self.visible
-                item.layer_name = self.layer_name
-            else:
-                item = target_object.PSDTOOLKIT_object_properties.psdtoolkit_layer_info[self.group_layer_index]
-                item.x = self.x
-                item.y = self.y
-                item.visible = self.visible
-                item.layer_name = self.layer_name
-        else:
-            self.report({ 'ERROR' }, "The psd plane can't be found")
-            return { 'CANCELLED' }
-        return {'FINISHED'}
+#     def execute(self, context):
+#         target_object = context.scene.objects.get(self.object_data_name)
+#         if target_object is not None:
+#             if self.sublayer:
+#                 item = target_object.PSDTOOL_psd_object_properties.psdtool_layer_info[self.group_layer_index].sublayer[self.sublayer_index]
+#                 item.x = self.x
+#                 item.y = self.y
+#                 item.visible = self.visible
+#                 item.layer_name = self.layer_name
+#             else:
+#                 item = target_object.PSDTOOL_object_properties.psdtool_layer_info[self.group_layer_index]
+#                 item.x = self.x
+#                 item.y = self.y
+#                 item.visible = self.visible
+#                 item.layer_name = self.layer_name
+#         else:
+#             self.report({ 'ERROR' }, "The psd plane can't be found")
+#             return { 'CANCELLED' }
+#         return {'FINISHED'}
     
 def _set_psd_object_properties(target_prop, data):
     target_prop.x = data["x"]
