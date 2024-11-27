@@ -3,12 +3,13 @@ import bpy
 from . import tool
 
 classes = (
+    tool.PSDTOOL_PT_top_panel,
     tool.PSDTOOL_UL_display_toplayer_frames,
     tool.PSDTOOL_UL_display_sub1layer_frames,
     tool.PSDTOOL_UL_display_sub2layer_frames,
     tool.PSDTOOL_UL_display_sub3layer_frames,
     tool.PSDTOOL_UL_display_sub4layer_frames,
-    tool.PSDTOOL_PT_main_panel,
+    tool.PSDTOOL_PT_layers_panel,
 )
 
 def register():

@@ -16,7 +16,6 @@ def import_psds_button(self, context):
     )
 
 def register():
-    print("register operatoraaaaaaaaaaaaaaaaaaaaaaaa")
     for cls in classes:
         bpy.utils.register_class(cls)
     bpy.types.TOPBAR_MT_file_import.append(import_psds_button)

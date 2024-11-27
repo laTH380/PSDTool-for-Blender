@@ -98,29 +98,25 @@ class PSDTOOL_UL_display_sub4layer_frames(UIList):
         elif self.layout_type in {'GRID'}:
             pass
 
-class PSDTOOL_PT_Panel(Panel):#領域定義
-    bl_space_type = "VIEW_3D" #ツールチップの説明文
-    bl_region_type = "UI"
-    bl_label = "Modifier Operations"
-    bl_category = "TEST"
-
-    def draw(self, context):#内容定義
-        layout = self.layout
-
-        row = layout.row()#横並びの要素枠
-        col = row.column()#縦並びの要素枠
-        col.operator("psdtoolkit.import_psd", text = "Apply All")
-        col.operator("psdtoolkit.import_psd", text = "Apply All_3")
-
-        col = row.column()
-        col.operator("psdtoolkit.import_psd", text = "Delete All")
-
-class PSDTOOL_PT_main_panel(Panel):
-    bl_label = "PSD Toolkit"
-    bl_idname = "PT_PSDTOOLKIT_main_panel"
+class PSDTOOL_PT_top_panel(Panel):#領域定義
+    bl_label = "PSDTool" #ツールチップの説明文
+    bl_idname = "PSDTOOL_PT_top_panel"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_category = 'PSD Toolkit'
+    bl_category = 'PSDTool'
+
+    def draw(self, context):#内容定義
+        layout = self.layout.column()
+        # コントロールパネル
+        row = layout.row()
+        row.operator('psdtoolkit.import_psd', text='import PSD', icon='OUTLINER_OB_MESH')
+
+class PSDTOOL_PT_layers_panel(Panel):
+    bl_label = "PSD layers"
+    bl_idname = "PSDTOOLKIT_PT_layers_panel"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'PSDTool'
 
     def draw(self, context):#描画内容
         #情報取得
@@ -134,31 +130,21 @@ class PSDTOOL_PT_main_panel(Panel):
 
         #描画
         layout = self.layout.column()#縦に詰める箱を追加（一列だけ）
-
-        # コントロールパネル
-        row = layout.row()#横に並べられる箱を追加（一行だけ）
-        row.label(text="ここにコントロールパネルを表示")
-
-        # 画像の表示
-        row = layout.row()
-        row.label(text="ここに画像を表示")
-        if is_active_object_psd:
-            row.template_preview(context.active_object, show_buttons=False)
-
         # レイヤー一覧
         col = layout.column()
-        row = col.row()
-        row.label(text="ここにレイヤー画像を表示")
+        # row = col.row()
+        # row.label(text="ここにレイヤー画像を表示")
+        
+        group_layer_table = col.column()
+        psd_info = active_object.PSDTOOLKIT_psd_object_properties
+        group_layer_table_item = group_layer_table.row()
+        group_layer_table_item.template_list(#その中にリストUIを作成
+            "PSDTOOL_UL_display_toplayer_frames",  # リストタイプの名前を文字列として渡す
+            "",
+            psd_info, "sublayer",#リストのデータソースで、
+            psd_info, "active_layer_index",#アクティブなアイテムのインデクス。
+        )
         if is_active_object_psd:
-            group_layer_table = col.column()
-            psd_info = active_object.PSDTOOLKIT_psd_object_properties
-            group_layer_table_item = group_layer_table.row()
-            group_layer_table_item.template_list(#その中にリストUIを作成
-                "PSDTOOL_UL_display_toplayer_frames",  # リストタイプの名前を文字列として渡す
-                "",
-                psd_info, "sublayer",#リストのデータソースで、
-                psd_info, "active_layer_index",#アクティブなアイテムのインデクス。
-            )
             sub1_layer = psd_info.sublayer[psd_info.active_layer_index]
             if len(sub1_layer.sublayer)>=1:
                 group_layer_table_item = group_layer_table.row()
