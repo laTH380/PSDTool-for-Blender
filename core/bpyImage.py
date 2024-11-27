@@ -30,6 +30,7 @@ def paccking_image_to_blender(image, name):
     loaded_image = bpy.data.images.load(temp_image_path)
     loaded_image.name = name
     loaded_image.pack()
+    loaded_image.use_fake_user = True
     # パックが成功したかどうかを確認
     if loaded_image.packed_file:
         print(f"Image '{loaded_image.name}' is packed into the .blend file.")
