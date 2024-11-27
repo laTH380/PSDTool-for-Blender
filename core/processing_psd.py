@@ -23,7 +23,7 @@ def _first_process_psd(psd):
     for index, layer in enumerate(psd):
         layer_struct_item = _recur_make_psd_struct(layer, layer_images)
         layer_struct.append(layer_struct_item)
-    utils.save_json_file(layer_struct, "./layer_struct.json")
+    # utils.save_json_file(layer_struct, "./layer_struct.json")
     return psd_info, layer_images, layer_struct, max_depth
 
 def _recur_make_psd_struct(layer, layer_images, depth=0):
@@ -34,10 +34,13 @@ def _recur_make_psd_struct(layer, layer_images, depth=0):
     if layer.is_group():
         sublayer_struct = []
         layer_images.append([])
+        layer_visible = layer.visible
+        if not layer.visible:
+            layer.visible = True
         for sublayer in layer:
             subsublayer_struct = _recur_make_psd_struct(sublayer, layer_images[-1], depth+1)
             sublayer_struct.append(subsublayer_struct)
-        layer_struct = _psd_layer_to_dict(layer.left, layer.top, layer.visible, layer.name, sublayer_struct)
+        layer_struct = _psd_layer_to_dict(layer.left, layer.top, layer_visible, layer.name, sublayer_struct)
         return layer_struct
     else:
         layer_struct = _psd_layer_to_dict(layer.left, layer.top, layer.visible, layer.name)
