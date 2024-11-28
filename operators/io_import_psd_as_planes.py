@@ -983,6 +983,7 @@ class PSDTOOL_OT_import_psd(Operator, AddObjectHelper):
         planes = []
         for index, img_spec in enumerate(ImageSpec_psds):
             plane = self.single_image_spec_to_plane(context, img_spec, processed_psds[index]["psd_info"]["obj_name"], processed_psds[index]["psd_info"]["mesh_name"])
+            processed_psds[index]["psd_info"]["obj_name"] = plane.name
             self.add_object_property(processed_psds[index]["psd_info"]["id"], processed_psds[index]["psd_info"], processed_psds[index]["layer_struct"])
             planes.append(plane)
 
