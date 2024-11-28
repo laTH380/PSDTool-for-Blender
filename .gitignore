@@ -7,3 +7,4 @@ releases/psd_to_plane/
 
 *.pyc
 venv2zip.sh
+project.md

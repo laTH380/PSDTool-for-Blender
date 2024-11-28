@@ -51,6 +51,13 @@ class PSDTOOL_OT_toggle_visibility(Operator):
     layer_index: IntProperty(name="layer_index", default=0)  # 何層目のアイテムがターゲットか？ 0~4
     item_index: IntProperty(name="item_index", default=0)  # ターゲットのインデックス。アクティブインデックスが更新されないまま呼ばれる可能性があるため
 
+    # @classmethod
+    # def poll(cls, context):#このオペレータが実行可能かどうかを返す
+    #     obj = context.object
+    #     if obj.mode == "OBJECT":
+    #         return True
+    #     return False
+
     def execute(self, context):
         target_obj = context.active_object
         target_parent = target_obj.PSDTOOL_psd_object_properties
