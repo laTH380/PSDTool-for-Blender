@@ -12,15 +12,15 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 ##########################
-# PSDTools for blender
+# PSDTool for Blender
 ##########################
 
 bl_info = {
-    "name" : "psd to plane",
+    "name" : "PSDTool for Blender",
     "author" : "laTH380",
     "description" : "",
     "blender" : (3, 6, 11),
-    "version" : (1, 0, 0),
+    "version" : (1, 1, 0),
     "location" : "",
     "warning" : "",
     "category" : "Generic"
