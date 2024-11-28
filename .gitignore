@@ -1,6 +1,10 @@
 __pycache__/
+.mypy_cache/
 venv_psd_to_plane/
 test/
 ex-library/
-releases/psd_to_plane/
+releases/PSDTool_for_Blender/
+
+*.pyc
 venv2zip.sh
+project.md
