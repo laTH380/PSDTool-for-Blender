@@ -4,6 +4,7 @@
 - レイヤーの表示非表示も切り替え可能です。
 - 動作確認済みver：blender v3.6.11
 ![利用の様子](readme2.png)
+![紹介動画](https://www.youtube.com/watch?v=J2tT6LREttw)
 
 ## ダウンロード
 最新版は[ここをクリック](https://github.com/laTH380/PSDToolKit-for-blender/releases/download/v1.1.0/PSDTool_for_Blender_1.1.0.zip)
