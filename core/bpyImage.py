@@ -59,7 +59,6 @@ def make_image(size):
     return new_image
 
 def merge_image(base_image, merged_image, x, y):
-    print("merge", type(base_image))
     if not isinstance(base_image, Image.Image) or not isinstance(merged_image, Image.Image):
         print("base_image:", type(base_image) , "merged_image:", type(merged_image))
         raise ValueError("base_imageとmerged_imageはPIL.Imageオブジェクトである必要があります")
