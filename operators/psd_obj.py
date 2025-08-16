@@ -4,27 +4,26 @@ from bpy.props import CollectionProperty, StringProperty, IntProperty, BoolPrope
 
 from core import bpyImage, config, bpyImage
 
-def _recur_make_image_from_psd_obj_prop(sublayer, combined_image, depth=0, layer_index=[0,0,0,0,0]):
-    print("aaa",type(combined_image))
+def _recur_make_image_from_psd_obj_prop(sublayer, combined_image, psd_id, depth=0, layer_index=[0,0,0,0,0]):
     tmp_combined_image = combined_image.copy()
     for layer in sublayer:
         layer_index[depth] += 1
         if layer.visible:
             if len(layer.sublayer) == 0:
-                layer_image_name = config.make_name_for_psdtool(kindID=0, layer_index=layer_index)
+                layer_image_name = config.make_name_for_psdtool(kindID=0, objectID=psd_id, layer_index=layer_index)
                 layer_image = bpyImage.get_packed_image_by_name(layer_image_name)
                 tmp_combined_image = bpyImage.merge_image(tmp_combined_image, layer_image, layer.x, layer.y)
             else:
-                print("bbb", type(tmp_combined_image))
-                tmp_combined_image = _recur_make_image_from_psd_obj_prop(layer.sublayer, tmp_combined_image, depth+1, layer_index)
+                tmp_combined_image = _recur_make_image_from_psd_obj_prop(layer.sublayer, tmp_combined_image, psd_id, depth+1, layer_index)
     layer_index[depth] = 0
     return tmp_combined_image
 
 def make_image_from_psd_obj_prop():
     psd_obj_prop = bpy.context.active_object.PSDTOOL_psd_object_properties
     size = [psd_obj_prop.size_x, psd_obj_prop.size_y]
+    psd_id = psd_obj_prop.psd_id
     final_image = bpyImage.make_image(size)
-    final_image = _recur_make_image_from_psd_obj_prop(psd_obj_prop.sublayer, final_image)
+    final_image = _recur_make_image_from_psd_obj_prop(psd_obj_prop.sublayer, final_image, psd_id)
     return final_image
 
 def update_tex(target_object):

@@ -19,8 +19,8 @@ bl_info = {
     "name" : "PSDTool for Blender",
     "author" : "laTH380",
     "description" : "",
-    "blender" : (3, 6, 11),
-    "version" : (1, 1, 0),
+    "blender" : (3, 6, 18),
+    "version" : (1, 2, 0),
     "location" : "",
     "warning" : "",
     "category" : "Generic"
