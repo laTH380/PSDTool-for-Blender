@@ -3,7 +3,7 @@ __pycache__/
 venv_psd_to_plane/
 test/
 ex-library/
-releases/src/
+releases/
 
 *.pyc
 venv2zip.sh
