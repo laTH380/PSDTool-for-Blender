@@ -121,15 +121,21 @@ class PSDTOOL_PT_layers_panel(Panel):
     def draw(self, context):#描画内容
         #情報取得
         active_object = context.active_object
-        is_active_object_psd = False
-        if len(active_object.PSDTOOL_psd_object_properties.sublayer)>=1:
-            is_active_object_psd = True
-        else:
-            print("no psd object properties")
-            is_active_object_psd = False
+        layout = self.layout.column()#縦に詰める箱を追加（一列だけ）
+
+        if active_object is None:
+            layout.label(text="オブジェクトを選択してください")
+            return
+
+        if not hasattr(active_object, "PSDTOOL_psd_object_properties"):
+            layout.label(text="PSDToolプロパティが見つかりません")
+            return
+
+        is_active_object_psd = len(active_object.PSDTOOL_psd_object_properties.sublayer) >= 1
+        if not is_active_object_psd:
+            layout.label(text="PSDレイヤー情報がありません")
 
         #描画
-        layout = self.layout.column()#縦に詰める箱を追加（一列だけ）
         # レイヤー一覧
         col = layout.column()
         # row = col.row()
