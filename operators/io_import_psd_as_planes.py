@@ -56,6 +56,31 @@ from bpy_extras.image_utils import load_image
 watched_objects = {}  # used to trigger compositor updates on scene updates
 
 
+def _set_node_input_default(node, input_names, value):
+    """Set first matching node input default value safely across Blender versions."""
+    for input_name in input_names:
+        socket = node.inputs.get(input_name)
+        if socket is not None:
+            socket.default_value = value
+            return True
+    return False
+
+
+def _apply_material_render_options(material, blend_method, shadow_method, use_backface_culling, show_transparent_back):
+    """Apply material options with Blender-version-safe guards."""
+    if hasattr(material, 'blend_method'):
+        material.blend_method = blend_method
+
+    if hasattr(material, 'shadow_method'):
+        material.shadow_method = shadow_method
+
+    if hasattr(material, 'use_backface_culling'):
+        material.use_backface_culling = use_backface_culling
+
+    if hasattr(material, 'show_transparent_back'):
+        material.show_transparent_back = show_transparent_back
+
+
 # -----------------------------------------------------------------------------
 # Misc utils.
 
@@ -1151,11 +1176,13 @@ class PSDTOOL_OT_import_psd(Operator, AddObjectHelper):
 
         material.use_nodes = True
 
-        material.blend_method = self.blend_method
-        material.shadow_method = self.shadow_method
-
-        material.use_backface_culling = self.use_backface_culling
-        material.show_transparent_back = self.show_transparent_back
+        _apply_material_render_options(
+            material,
+            self.blend_method,
+            self.shadow_method,
+            self.use_backface_culling,
+            self.show_transparent_back,
+        )
 
         node_tree = material.node_tree
         out_node = clean_node_tree(node_tree)
@@ -1168,9 +1195,9 @@ class PSDTOOL_OT_import_psd(Operator, AddObjectHelper):
             core_shader = get_shadeless_node(node_tree)
         elif self.shader == 'EMISSION':
             core_shader = node_tree.nodes.new('ShaderNodeBsdfPrincipled')
-            core_shader.inputs['Emission Strength'].default_value = self.emit_strength
-            core_shader.inputs['Base Color'].default_value = (0.0, 0.0, 0.0, 1.0)
-            core_shader.inputs['Specular'].default_value = 0.0
+            _set_node_input_default(core_shader, ['Emission Strength'], self.emit_strength)
+            _set_node_input_default(core_shader, ['Base Color'], (0.0, 0.0, 0.0, 1.0))
+            _set_node_input_default(core_shader, ['Specular', 'Specular IOR Level'], 0.0)
 
         # Connect color from texture
         if self.shader in {'PRINCIPLED', 'SHADELESS'}:
