@@ -2,9 +2,9 @@
 - PSDファイルをプレーンオブジェクトとして取り込む機能を追加するBlenderアドオンです。
 - 取り込まれたpsdファイルはプレーンオブジェクトにテクスチャとして適用され表示されます。
 - レイヤーの表示非表示も切り替え可能です。
-- 動作確認済みver：blender v3.6.11
-![利用の様子](resources/readme2.png)
-[![PSDTool for Blender 紹介動画](https://github.com/user-attachments/assets/7dc2182d-ed10-4f62-9edf-00ac9df117ed)](https://www.youtube.com/watch?v=J2tT6LREttw)
+- 動作確認済みver：blender v3.6 LTS / v4.5 LTS
+![利用の様子](readme2.png)
+[![紹介動画](![image](https://github.com/user-attachments/assets/7dc2182d-ed10-4f62-9edf-00ac9df117ed)](https://www.youtube.com/watch?v=J2tT6LREttw)
 
 ## ダウンロード
 最新版は[ここをクリック](https://github.com/laTH380/PSDToolKit-for-blender/releases/download/v1.1.0/PSDTool_for_Blender_1.1.0.zip)
@@ -17,13 +17,14 @@
 ## QandA
 ### 今後のアップデート予定は？
 - [PSDToolKit](https://oov.github.io/aviutl_psdtoolkit/index.html)と同等の機能を追加し、Blender内でPSD製立ち絵を簡単に使えるようにします。
-- Blender~~4.2.4~~4.5へのサポート予定
+- Blender 4.5 LTS 対応済み
 - テクスチャを切り替えるアニメーションを簡単に追加できる機能
 
 ## 更新履歴
 - 1.0.0 - 2024/6/24 初版公開
 - 1.1.0 - 2024/11/28 レイヤー表示切り替え機能追加、アドオン名を「PSDTool for Blender」に変更
 - 1.2.0 - 2025/8/16 複数種類のPSDインポート時の不具合を修正
+- 1.3.0 - 2026/2/28 Blender 4.5 LTS 互換対応（UI安全性とマテリアル設定の互換処理を追加）
 
 ## ライセンス
 このプログラムは、GNU General Public License（GPL）に基づいて配布されています。
