@@ -3,7 +3,7 @@
 - 取り込まれたpsdファイルはプレーンオブジェクトにテクスチャとして適用され表示されます。
 - レイヤーの表示非表示も切り替え可能です。
 - 動作確認済みver：blender v3.6 LTS / v4.5 LTS
-![利用の様子](readme2.png)
+![利用の様子](resources/readme2.png)
 [![紹介動画](![image](https://github.com/user-attachments/assets/7dc2182d-ed10-4f62-9edf-00ac9df117ed)](https://www.youtube.com/watch?v=J2tT6LREttw)
 
 ## ダウンロード
