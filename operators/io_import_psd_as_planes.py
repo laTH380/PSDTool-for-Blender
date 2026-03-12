@@ -55,6 +55,18 @@ from bpy_extras.image_utils import load_image
 
 watched_objects = {}  # used to trigger compositor updates on scene updates
 
+SUPPORTED_MATERIAL_ENGINES = {
+    'CYCLES',
+    'BLENDER_EEVEE',
+    'BLENDER_EEVEE_NEXT',
+    'BLENDER_WORKBENCH',
+}
+SUPPORTED_NODE_MATERIAL_ENGINES = {
+    'CYCLES',
+    'BLENDER_EEVEE',
+    'BLENDER_EEVEE_NEXT',
+}
+
 
 def _set_node_input_default(node, input_names, value):
     """Set first matching node input default value safely across Blender versions."""
@@ -866,7 +878,7 @@ class PSDTOOL_OT_import_psd(Operator, AddObjectHelper):
         row.prop(self, "use_backface_culling")
 
         engine = context.scene.render.engine
-        if engine not in ('CYCLES', 'BLENDER_EEVEE', 'BLENDER_WORKBENCH'):
+        if engine not in SUPPORTED_MATERIAL_ENGINES:
             box.label(text=tip_("%s is not supported") % engine, icon='ERROR')
 
         box.prop(self, "overwrite_material")
@@ -932,7 +944,7 @@ class PSDTOOL_OT_import_psd(Operator, AddObjectHelper):
     # Core functionality
     def invoke(self, context, event):#オプションとして、invoke() メソッドがあります。このメソッドは、オペレータがユーザーによって呼び出されるときに実行され、通常、ファイル選択ダイアログやパラメータの設定などの準備を行います。
         engine = context.scene.render.engine
-        if engine not in {'CYCLES', 'BLENDER_EEVEE'}:
+        if engine not in SUPPORTED_NODE_MATERIAL_ENGINES:
             if engine != 'BLENDER_WORKBENCH':
                 self.report({'ERROR'}, tip_("Cannot generate materials for unknown %s render engine") % engine)
                 return {'CANCELLED'}
@@ -1094,7 +1106,7 @@ class PSDTOOL_OT_import_psd(Operator, AddObjectHelper):
 
         # Configure material
         engine = context.scene.render.engine
-        if engine in {'CYCLES', 'BLENDER_EEVEE', 'BLENDER_WORKBENCH'}:
+        if engine in SUPPORTED_MATERIAL_ENGINES:
             material = self.create_cycles_material(context, img_spec)
 
         # Create and position plane object

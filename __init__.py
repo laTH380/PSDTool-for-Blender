@@ -20,7 +20,6 @@ bl_info = {
     "author" : "laTH380",
     "description" : "",
     "blender" : (3, 6, 0),
-    "version" : (1, 3, 0),
     "location" : "",
     "warning" : "",
     "category" : "Generic"
@@ -28,35 +27,68 @@ bl_info = {
 
 import os
 import sys
-   
-# PYTHONPATHにex-libraryを追加
+import importlib
+import importlib.util
+
+import bpy
+from bpy.types import AddonPreferences
+
+# PYTHONPATHにex-libraryを追加（Pythonバージョン別フォルダを優先）
 basepath = os.path.split(os.path.realpath(__file__))[0]
-print(os.path.join(basepath, 'ex-library'))
-sys.path.insert(0, os.path.join(basepath, 'ex-library'))
+
+
+def _get_exlibrary_path():
+    exlibrary_root = os.path.join(basepath, "ex-library")
+    py_tag = f"py{sys.version_info.major}{sys.version_info.minor}"
+    versioned_path = os.path.join(exlibrary_root, py_tag)
+
+    if os.path.isdir(versioned_path):
+        return versioned_path
+    if os.path.isdir(exlibrary_root):
+        return exlibrary_root
+    return None
+
+
+selected_exlibrary = _get_exlibrary_path()
+if selected_exlibrary:
+    print(f"[PSDTool] ex-library path: {selected_exlibrary}")
+    sys.path.insert(0, selected_exlibrary)
+else:
+    print("[PSDTool] ex-library path not found")
+
 sys.path.insert(0, basepath)
 
-import importlib
-from PIL import Image
 
+_REQUIRED_MODULES = ("PIL", "psd_tools")
+_missing_dependencies = [name for name in _REQUIRED_MODULES if importlib.util.find_spec(name) is None]
+_loaded_feature_modules = []
 
 modules = [
-    # "main_operator",
     "panels",
     "properties",
     "operators"
 ]
 
-if "bpy" in locals():
-    for module in modules:
-        importlib.reload(locals()[module])
-else:
-    from . import panels
-    from . import properties
-    from . import operators
-    import bpy
 
-import bpy
-from bpy.props import PointerProperty, StringProperty, IntProperty
+class PSDTOOL_preferences(AddonPreferences):
+    bl_idname = __name__
+
+    def draw(self, context):
+        layout = self.layout
+        if _missing_dependencies:
+            layout.label(text="PSDTool dependencies are missing:", icon='ERROR')
+            for module_name in _missing_dependencies:
+                layout.label(text=f"- {module_name}")
+            layout.separator()
+            layout.label(text="Install requirements.txt into Blender Python and re-enable the addon.")
+        else:
+            layout.label(text="Dependencies are ready.", icon='CHECKMARK')
+
+
+classes = (
+    PSDTOOL_preferences,
+)
+
 
 # 翻訳辞書
 translations = {
@@ -68,55 +100,75 @@ translations = {
     }
 }
 
-classes = (
-    #property
-    # control_property.PSDTOOL_scene_properties_psdlist_item,
-    # control_property.PSDTOOL_scene_properties,
-    # control_property.PSDTOOL_psd_object_properties_sub4_layer,
-    # control_property.PSDTOOL_psd_object_properties_sub3_layer,
-    # control_property.PSDTOOL_psd_object_properties_sub2_layer,
-    # control_property.PSDTOOL_psd_object_properties_sub1_layer,
-    # control_property.PSDTOOL_psd_object_properties_top_layer,
-    # control_property.PSDTOOL_psd_object_properties,
-    #ui
-    # ui_panel.PSDTOOL_PT_main_panel,
-    # ui_panel.MMDDisplayItemsPanel,
-    # ui_panel.PSDTOOL_UL_display_toplayer_frames,
-    # ui_panel.PSDTOOL_UL_display_sub1layer_frames,
-    # ui_panel.PSDTOOL_PT_Panel,
-    #operator
-    # control_property.PSDTOOL_OT_add_scene_properties_psd_list,
-    # control_property.PSDTOOL_OT_make_object_properties,
-    # control_property.PSDTOOL_OT_set_object_properties,
-    # io_import_psd_as_planes.PSDTOOL_OT_import_psd
-)
 
-# def import_psds_button(self, context):#メニューに追加するボタンを作る関数
-#     self.layout.operator(io_import_psd_as_planes.PSDTOOL_OT_import_psd.bl_idname, text="Import Psd as Planes", icon='TEXTURE')
+def _register_translations_safely():
+    # VSCode addon loader で再読み込み時に残存キャッシュがある場合に備える
+    try:
+        bpy.app.translations.unregister(__name__)
+    except ValueError:
+        pass
+    bpy.app.translations.register(__name__, translations)
+
+
+def _unregister_translations_safely():
+    try:
+        bpy.app.translations.unregister(__name__)
+    except ValueError:
+        pass
+
+
+def _load_feature_modules():
+    loaded = []
+    if _missing_dependencies:
+        return loaded
+
+    if "bpy" in locals():
+        for module in modules:
+            if module in locals():
+                importlib.reload(locals()[module])
+                loaded.append(locals()[module])
+            else:
+                loaded.append(importlib.import_module(__name__ + "." + module))
+    else:
+        for module in modules:
+            loaded.append(importlib.import_module(__name__ + "." + module))
+    return loaded
+
 
 def register():
-    for module in modules:
-        importlib.import_module(__name__ + "." + module).register()
+    global _loaded_feature_modules
+
     for c in classes:
         bpy.utils.register_class(c)
-    bpy.app.translations.register(__name__, translations)
-    # bpy.types.Scene.PSDTOOL_scene_properties = PointerProperty(type=control_property.PSDTOOL_scene_properties)
-    # bpy.types.Object.PSDTOOL_psd_object_properties = PointerProperty(type=control_property.PSDTOOL_psd_object_properties)
-    # bpy.types.TOPBAR_MT_file_import.append(import_psds_button)
-    # bpy.types.VIEW3D_MT_image_add.append(import_psds_button)
-    # bpy.utils.register_class(ui_panel.PSDTOOL_PT_main_panel)
+
+    _register_translations_safely()
+
+    if _missing_dependencies:
+        print(
+            "[PSDTool] Missing dependencies: "
+            + ", ".join(_missing_dependencies)
+            + ". Install requirements.txt into Blender Python."
+        )
+        return
+
+    _loaded_feature_modules = _load_feature_modules()
+    for module in _loaded_feature_modules:
+        module.register()
+
 
 def unregister():
-    for module in reversed(modules):
-        importlib.import_module(__name__ + "." + module).unregister()
-    # bpy.types.TOPBAR_MT_file_import.remove(import_psds_button)
-    # bpy.types.VIEW3D_MT_image_add.remove(import_psds_button)
-    # bpy.utils.unregister_class(ui_panel.PSDTOOL_PT_main_panel)
-    # del bpy.types.Scene.PSDTOOL_scene_properties
-    # del bpy.types.Object.PSDTOOL_psd_object_properties
-    bpy.app.translations.unregister(__name__)
-    for c in classes:
+    global _loaded_feature_modules
+
+    if not _missing_dependencies:
+        for module in reversed(_loaded_feature_modules):
+            module.unregister()
+        _loaded_feature_modules = []
+
+    _unregister_translations_safely()
+
+    for c in reversed(classes):
         bpy.utils.unregister_class(c)
+
 
 if __name__ == "__main__":
     register()

@@ -13,10 +13,13 @@ def get_packed_image_by_name(image_name):
         print(f"Image '{image_name}' が見つからないか、パックされていません。")
         return None
     
-def paccking_merged_image_to_blender(image):
-    name = config.make_name_for_psdtool(kindID=1, frame=bpy.context.scene.frame_current)
-    paccking_image_to_blender(image, name)
-    return name
+def paccking_merged_image_to_blender(image, object_id):
+    name = config.make_name_for_psdtool(
+        kindID=1,
+        objectID=object_id,
+        frame=bpy.context.scene.frame_current,
+    )
+    return paccking_image_to_blender(image, name)
     
 #　paccking image object to .blend file
 def paccking_image_to_blender(image, name):
@@ -38,6 +41,7 @@ def paccking_image_to_blender(image, name):
         print(f"Failed to pack image '{loaded_image.name}' into the .blend file.")
     # 一時ファイルを削除する
     os.remove(temp_image_path)
+    return loaded_image.name
 
 def save_tmp_bpyImage(img):
     temp_dir = tempfile.mkdtemp(prefix='blender_temp_')
