@@ -7,7 +7,7 @@ TARGET_DIR="ex-library/${PY_TAG}"
 uv pip freeze > requirements.txt
 rm -rf "${TARGET_DIR}"
 mkdir -p "${TARGET_DIR}"
-uv pip install -r requirements.txt --target "${TARGET_DIR}"
+uv pip install -r requirements.txt --link-mode copy --target "${TARGET_DIR}"
 # Compress-Archive -Path .\ex-library\* -DestinationPath .\ex-library.zip
 
 # Linux/macOS:

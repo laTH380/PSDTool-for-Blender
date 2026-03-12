@@ -69,6 +69,7 @@ Invoke-UvOrThrow -Args @(
     "pip", "install",
     "-r", "requirements.txt",
     "--python", $BlenderPython,
+    "--link-mode", "copy",
     "--target", $targetRoot
 )
 
