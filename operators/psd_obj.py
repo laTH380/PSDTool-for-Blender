@@ -2,7 +2,7 @@ import bpy
 from bpy.types import Operator
 from bpy.props import CollectionProperty, StringProperty, IntProperty, BoolProperty, PointerProperty
 
-from core import bpyImage, config, bpyImage
+from core import bpyImage, config
 
 def _recur_make_image_from_psd_obj_prop(sublayer, combined_image, psd_id, depth=0, layer_index=[0,0,0,0,0]):
     tmp_combined_image = combined_image.copy()
@@ -18,8 +18,8 @@ def _recur_make_image_from_psd_obj_prop(sublayer, combined_image, psd_id, depth=
     layer_index[depth] = 0
     return tmp_combined_image
 
-def make_image_from_psd_obj_prop():
-    psd_obj_prop = bpy.context.active_object.PSDTOOL_psd_object_properties
+def make_image_from_psd_obj_prop(target_object):
+    psd_obj_prop = target_object.PSDTOOL_psd_object_properties
     size = [psd_obj_prop.size_x, psd_obj_prop.size_y]
     psd_id = psd_obj_prop.psd_id
     final_image = bpyImage.make_image(size)
@@ -27,8 +27,9 @@ def make_image_from_psd_obj_prop():
     return final_image
 
 def update_tex(target_object):
-    new_image = make_image_from_psd_obj_prop()
-    new_tex_name = bpyImage.paccking_merged_image_to_blender(new_image)
+    psd_id = target_object.PSDTOOL_psd_object_properties.psd_id
+    new_image = make_image_from_psd_obj_prop(target_object)
+    new_tex_name = bpyImage.paccking_merged_image_to_blender(new_image, psd_id)
     new_tex = bpy.data.images.get(new_tex_name)
     # オブジェクトのすべてのマテリアルをループ
     for mat in target_object.data.materials:

@@ -64,9 +64,9 @@ def copy_release_files(release_dir):
         if src.exists():
             dst = release_dir / file_name
             shutil.copy2(src, dst)
-            print(f"✅ コピー完了: {file_name}")
+            print(f"[OK] コピー完了: {file_name}")
         else:
-            print(f"⚠️  ファイルが見つかりません: {file_name}")
+            print(f"[WARN] ファイルが見つかりません: {file_name}")
     
     # フォルダを再帰的にコピー
     for folder_name in folders_to_copy:
@@ -74,15 +74,15 @@ def copy_release_files(release_dir):
         if src.exists():
             dst = release_dir / folder_name
             shutil.copytree(src, dst)
-            print(f"✅ フォルダコピー完了: {folder_name}")
+            print(f"[OK] フォルダコピー完了: {folder_name}")
         else:
-            print(f"⚠️  フォルダが見つかりません: {folder_name}")
+            print(f"[WARN] フォルダが見つかりません: {folder_name}")
 
 def clean_pycache(release_dir):
     """__pycache__フォルダを削除"""
     for pycache_dir in release_dir.rglob("__pycache__"):
         shutil.rmtree(pycache_dir)
-        print(f"🗑️  削除: {pycache_dir}")
+        print(f"[CLEAN] 削除: {pycache_dir}")
 
 def create_zip(release_dir, version):
     """zipファイルを作成"""
@@ -100,13 +100,13 @@ def create_zip(release_dir, version):
                 # releases/src/PSDTool_for_Blender_{version}/ からの相対パスを計算
                 arcname = file_path.relative_to(release_dir.parent.parent) 
                 zipf.write(file_path, arcname)
-                print(f"📦 zip追加: {arcname}")
+                print(f"[ZIP] 追加: {arcname}")
     
     return zip_path
 
 def main():
     """メイン処理"""
-    print("🚀 PSDTool for Blender リリース用zip作成を開始...")
+    print("PSDTool for Blender リリース用zip作成を開始...")
     
     try:
         # カレントディレクトリの確認
@@ -115,36 +115,36 @@ def main():
         
         # バージョン取得
         version = get_version_from_init()
-        print(f"📋 検出されたバージョン: {version}")
+        print(f"検出されたバージョン: {version}")
         
         # リリースディレクトリ作成
         release_dir = create_release_directory(version)
-        print(f"📁 リリースディレクトリ作成: {release_dir}")
+        print(f"リリースディレクトリ作成: {release_dir}")
         
         # ファイルコピー
-        print("📄 ファイルをコピー中...")
+        print("ファイルをコピー中...")
         copy_release_files(release_dir)
         
         # クリーンアップ
-        print("🧹 __pycache__を削除中...")
+        print("__pycache__を削除中...")
         clean_pycache(release_dir)
         
         # zip作成
-        print("📦 zipファイルを作成中...")
+        print("zipファイルを作成中...")
         zip_path = create_zip(release_dir, version)
         
-        print(f"\n✅ リリース完了!")
-        print(f"📦 作成されたzip: {zip_path}")
-        print(f"📏 ファイルサイズ: {zip_path.stat().st_size / 1024 / 1024:.2f} MB")
+        print(f"\nリリース完了")
+        print(f"作成されたzip: {zip_path}")
+        print(f"ファイルサイズ: {zip_path.stat().st_size / 1024 / 1024:.2f} MB")
         
         # 次のステップの案内
-        print(f"\n📝 次のステップ:")
+        print(f"\n次のステップ:")
         print(f"1. README.mdの更新")
         print(f"2. mainブランチへのマージ")
         print(f"3. GitHubでのリリース作成 (v{version})")
         
     except Exception as e:
-        print(f"❌ エラーが発生しました: {e}")
+        print(f"エラーが発生しました: {e}")
         return 1
     
     return 0
